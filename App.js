@@ -1,110 +1,59 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import { View, Dimensions, StyleSheet,Animated, Button } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import HomePage from './components/home';
+import MenuPage from './components/menu';
+import NavBar from './components/navbar';
 
-const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
-const navbarHeight = 80; // Height of the navbar, adjust as needed
+const Tab = createBottomTabNavigator();
+const { height: viewportHeight } = Dimensions.get('window');
+const navbarHeight = 80; // Adjust as needed
+
+function HomeScreen() {
+  return <HomePage />;
+}
+
+function MenuScreen() {
+  return <MenuPage />;
+}
+
+function AccountScreen() {
+  return <AccountPage />;
+}
+
+function BagScreen() {
+  return <BagPage />;
+}
+
 const headerHeight = 130; // Height of the header, adjust as needed
 
 const App = () => {
-  const carouselItems = [
-    { source: require('./assets/home.jpg') },
-    { source: require('./assets/home.jpg') },
-    { source: require('./assets/home.jpg') },
-    // Add more images as needed
-  ];
-
-  const renderItem = ({item, index}) => {
-    return (
-      <View style={styles.slide}>
-        <Image source={item.source} style={styles.carouselImage} />
-      </View>
-    );
-  };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>ZARA</Text>
-      </View>
-      <Carousel
-        data={carouselItems}
-        renderItem={renderItem}
-        sliderHeight={viewportHeight - navbarHeight} // The height of the carousel slider
-        itemHeight={viewportHeight - navbarHeight} // Each carousel item takes the full height
-        vertical={true}
-        inactiveSlideScale={1}
-        inactiveSlideOpacity={1}
-      />
-      <View style={styles.navBar}>
-      <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navText}>HOME</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navText}>MENU</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navText}>ACCOUNT</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navText}>BAG (0)</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <NavigationContainer>
+    <Tab.Navigator
+      tabBar={props => <NavBar {...props} />}
+      screenOptions={{
+        tabBarHideOnKeyboard: true,
+        tabBarStyle: { height: navbarHeight },
+        headerShown: false,
+      }}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Menu" component={MenuScreen} />
+      {/* <Tab.Screen name="Account" component={AccountScreen} />
+      <Tab.Screen name="Bag" component={BagScreen} /> */}
+    </Tab.Navigator>
+  </NavigationContainer>
   );
 };
 
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
+  pageContainer: {
+    height: viewportHeight - navbarHeight,
   },
-  slide: {
-    width: viewportWidth,
-    height: viewportHeight - navbarHeight, // Full height of the carousel slide
-  },
-  carouselImage: {
-    width: '100%',
-    height: '100%', // Image covers the full area of the slide
-    resizeMode: 'cover', // This ensures the image covers the slide without being stretched
-  },
-  header: {
-    position: 'absolute',
-    top: '5%',
-    left: 0,
-    right: 0,
-    height: headerHeight,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1,
-    backgroundColor: 'transparent', // Assuming a transparent background for the header
-  },
-  headerText: {
-    fontSize: 130,
-    fontWeight: 'bold',
-    color: '#fff', // Assuming white text for the header
-  },
-  navBar: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: navbarHeight,
-    backgroundColor: 'black', // Based on the image
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    width: '100%',
-    paddingHorizontal: 10, // Add some padding on the sides
-  },
-  navItem: {
-    paddingBottom: 20,
-  },
-  navText: {
-    fontSize: 12,
-    color: 'white',
-  },
-  // Style for the rest of your navbar items...
 });
 
 export default App;
