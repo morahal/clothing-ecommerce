@@ -5,9 +5,9 @@ const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window'
 const navbarHeight = 80; // Height of the navbar
 
 const categories = {
-  Men: ['T-Shirt', 'Shirts','Sweatpants', 'Jeans', 'Trousers','Jackets', 'Sweaters & Hoodies','Shoes'],
-  Women: ['Lifestyle', 'Food', 'Nature'],
-  Kids: ['Tech', 'Automotive', 'Travel'],
+  Men: ['T-SHIRT', 'SHIRTS', 'JEANS', 'TROUSERS','JACKETS','SHORTS', 'SWEATERS & HOODIES','SUITS','BAGS','SHOES'],
+  Women: ['T-SHIRT', 'SHIRTS','SWEATSHIRTS', 'JEANS', 'TROUSERS','SHORTS & SKIRTS' , 'JACKETS','DRESSES', 'TOPS', 'SWEATERS & HOODIES','BAGS','SHOES'],
+  Kids: ['T-SHIRT', 'SHIRTS', 'JEANS', 'TROUSERS','SHORTS','JACKETS', 'SWEATERS & HOODIES','BAGS','SHOES','DRESSES','SHORTS & SKIRTS' ,'TOPS'],
 };
 
 const MenuPage = () => {
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   categoryText: {
-    fontSize: 15,
+    fontSize: 12,
     // Additional styles for category text
   },
   // ... other styles

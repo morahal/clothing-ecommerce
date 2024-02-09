@@ -12,7 +12,7 @@ const NavBar = () => {
       <TouchableOpacity onPress={() => navigation.navigate('Menu')} style={styles.navItem}>
         <Text style={styles.navText}>MENU</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.navItem}>
+      <TouchableOpacity onPress={() => navigation.navigate('Account')} style={styles.navItem}>
         <Text style={styles.navText}>ACCOUNT</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.navItem}>

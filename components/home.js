@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef }  from 'react';
 import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import NavBar from '../components/navbar';
@@ -10,10 +10,23 @@ const navbarHeight = 80; // Height of the navbar
 const HomePage = ({ navigation }) => {
   const carouselItems = [
     { source: require('../assets/home.jpg') },
-    { source: require('../assets/home.jpg') },
-    { source: require('../assets/home.jpg') },
+    { source: require('../assets/home2.jpg') },
+    { source: require('../assets/home3.jpg') },
     // Add more images as needed
   ];
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const carouselRef = useRef(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const nextIndex = activeIndex === carouselItems.length - 1 ? 0 : activeIndex + 1;
+      setActiveIndex(nextIndex);
+      carouselRef.current?.snapToItem(nextIndex);
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [activeIndex]);
 
   const renderItem = ({ item, index }) => {
     return (
@@ -29,6 +42,7 @@ const HomePage = ({ navigation }) => {
             <Text style={styles.headerText}>ZARA</Text>
         </View>
       <Carousel
+        ref={carouselRef}
         data={carouselItems}
         renderItem={renderItem}
         sliderHeight={viewportHeight - navbarHeight} // Adjusted for navbar
@@ -36,6 +50,7 @@ const HomePage = ({ navigation }) => {
         vertical={true}
         inactiveSlideScale={1}
         inactiveSlideOpacity={1}
+        onSnapToItem={(index) => setActiveIndex(index)}
       />
     </View>
   );
@@ -60,7 +75,7 @@ const styles = StyleSheet.create({
       top: '5%',
       left: 0,
       right: 0,
-      height: 130,
+      height: 150,
       justifyContent: 'center',
       alignItems: 'center',
       zIndex: 1,
@@ -69,7 +84,7 @@ const styles = StyleSheet.create({
     headerText: {
       fontSize: 130,
       fontWeight: 'bold',
-      color: '#fff', // Assuming white text for the header
+      color: '#fff',
     },
 });
 

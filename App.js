@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomePage from './components/home';
 import MenuPage from './components/menu';
 import NavBar from './components/navbar';
+import AccountPage from './components/account';
 
 const Tab = createBottomTabNavigator();
 const { height: viewportHeight } = Dimensions.get('window');
@@ -42,8 +43,8 @@ const App = () => {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Menu" component={MenuScreen} />
-      {/* <Tab.Screen name="Account" component={AccountScreen} />
-      <Tab.Screen name="Bag" component={BagScreen} /> */}
+      <Tab.Screen name="Account" component={AccountScreen} />
+      {/* <Tab.Screen name="Bag" component={BagScreen} /> */}
     </Tab.Navigator>
   </NavigationContainer>
   );
