@@ -10,8 +10,9 @@ const navbarHeight = 80; // Height of the navbar
 const HomePage = ({ navigation }) => {
   const carouselItems = [
     { source: require('../assets/home.jpg') },
-    { source: require('../assets/home2.jpg') },
     { source: require('../assets/home3.jpg') },
+    { source: require('../assets/home2.jpg') },
+   
     // Add more images as needed
   ];
 
@@ -37,7 +38,7 @@ const HomePage = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ }}>
         <View style={styles.header}>
             <Text style={styles.headerText}>ZARA</Text>
         </View>
@@ -61,14 +62,17 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
     },
+    
     slide: {
       width: viewportWidth,
       height: viewportHeight - navbarHeight, // Full height of the carousel slide
+      
     },
     carouselImage: {
       width: '100%',
       height: '100%', // Image covers the full area of the slide
       resizeMode: 'cover', // This ensures the image covers the slide without being stretched
+      
     },
     header: {
       position: 'absolute',
@@ -86,6 +90,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       color: '#fff',
     },
+
 });
 
 export default HomePage;

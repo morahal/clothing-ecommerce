@@ -2,12 +2,16 @@ import React from 'react';
 import { View, Dimensions, StyleSheet,Animated, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import HomePage from './components/home';
 import MenuPage from './components/menu';
 import NavBar from './components/navbar';
 import AccountPage from './components/account';
+import MenuStackScreen from './components/menu';
 
 const Tab = createBottomTabNavigator();
+
+
 const { height: viewportHeight } = Dimensions.get('window');
 const navbarHeight = 80; // Adjust as needed
 
@@ -42,7 +46,7 @@ const App = () => {
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Menu" component={MenuScreen} />
+      <Tab.Screen name="Menu" component={MenuStackScreen} />
       <Tab.Screen name="Account" component={AccountScreen} />
       {/* <Tab.Screen name="Bag" component={BagScreen} /> */}
     </Tab.Navigator>

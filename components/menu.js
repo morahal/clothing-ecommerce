@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 const navbarHeight = 80; // Height of the navbar
@@ -10,7 +11,27 @@ const categories = {
   Kids: ['T-SHIRT', 'SHIRTS', 'JEANS', 'TROUSERS','SHORTS','JACKETS', 'SWEATERS & HOODIES','BAGS','SHOES','DRESSES','SHORTS & SKIRTS' ,'TOPS'],
 };
 
-const MenuPage = () => {
+//************************************************************************************************/
+import Cards from './cards'; // Create this component for category details
+
+const MenuStack = createStackNavigator();
+
+function MenuStackScreen() {
+  return (
+    <MenuStack.Navigator>
+      <MenuStack.Screen name="MenuPage" component={MenuPage} options={{ headerShown: false }} />
+      <MenuStack.Screen name="CardsPage" component={Cards} />
+    </MenuStack.Navigator>
+  );
+}
+//************************************************************************************************/
+
+
+const MenuPage = ({ navigation }) => {
+
+  const handlePressCategoryItem = (category) => {
+    navigation.navigate('CardsPage', { category });
+  };
 
   const [selectedTab, setSelectedTab] = useState('Men'); // Default selected tab
 
@@ -20,7 +41,7 @@ const MenuPage = () => {
     return (
       <ScrollView>
       {categoryList.map((category, index) => (
-        <TouchableOpacity key={index} style={styles.categoryItem}>
+        <TouchableOpacity key={index} style={styles.categoryItem} onPress={() => handlePressCategoryItem(category)}>
           <Text style={styles.categoryText}>{category}</Text>
         </TouchableOpacity>
       ))}
@@ -93,4 +114,4 @@ const styles = StyleSheet.create({
   // ... other styles
 });
 
-export default MenuPage;
+export default MenuStackScreen;
