@@ -4,7 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 
 
-const Card = ({ title, imageUrl, price }) => {
+const Card = ({ title, imageUrl, price, onPress }) => {
     const [isFavorited, setIsFavorited] = useState(false);
 
     const toggleFavorite = () => {
@@ -13,15 +13,15 @@ const Card = ({ title, imageUrl, price }) => {
     };
 
   return (
-    <SafeAreaView style={styles.card}>
+    <TouchableOpacity onPress={onPress} style={styles.card}>
+      
+    <SafeAreaView >
        <Image source={imageUrl} style={styles.image} /> 
 
       <View style={styles.cardContent}>
-
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.price}>$ {price} </Text>
-
-       </View>
+      </View>
 
        <TouchableOpacity style={styles.favoriteButton} onPress={toggleFavorite}>
          {isFavorited ? (
@@ -30,8 +30,9 @@ const Card = ({ title, imageUrl, price }) => {
           <AntDesign name="hearto" size={24} color="black" />
         )}
         </TouchableOpacity> 
-
     </SafeAreaView>
+
+    </TouchableOpacity>
   );
 };
 

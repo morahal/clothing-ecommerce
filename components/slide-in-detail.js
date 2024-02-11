@@ -49,15 +49,13 @@ const OptionsModal = ({ visible, onClose, options, selectedOption, onSelect }) =
   );
 };
 
-const SlideInMenu = () => {
+const SlideInDetail = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [options, setOptions] = useState([]);
   const [currentOptionType, setCurrentOptionType] = useState('');
   const [selectedOptions, setSelectedOptions] = useState({
     size: null,
-    price: null,
     colour: null,
-    type: null,
   });
 
   const handleSelect = (option) => {
@@ -77,9 +75,7 @@ const SlideInMenu = () => {
     // Define the options based on the type
     const optionsByType = {
       size: ['S', 'M', 'L', 'XL'],
-      price: ['$10', '$20', '$30', '$40'],
       colour: ['Red', 'Green', 'Blue', 'Yellow'],
-      type: ['Shirt', 'Pants', 'Shoes', 'Hat'],
     };
 
     setOptions(optionsByType[optionType]);
@@ -92,10 +88,7 @@ const SlideInMenu = () => {
     <View style={styles.container}>
       <View style={styles.list}>
         <ListItem title="SIZE" onPress={() => handlePress('size')} selected={selectedOptions.size !== null}/>
-        <ListItem title="PRICE" onPress={() => handlePress('price')} selected={selectedOptions.price !== null}/>
         <ListItem title="COLOUR" onPress={() => handlePress('colour')} selected={selectedOptions.colour !== null}/>
-        <ListItem title="TYPE" onPress={() => handlePress('type')} selected={selectedOptions.type !== null}/>
-
       </View>
 
       <OptionsModal
@@ -157,9 +150,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray', // Background color for selected option
   },
 
-
-
-
   item: {
     flex: 1,
     alignItems: 'center',
@@ -184,4 +174,4 @@ const styles = StyleSheet.create({
   
 });
 
-export default SlideInMenu;
+export default SlideInDetail;

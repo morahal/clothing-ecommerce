@@ -13,6 +13,7 @@ const categories = {
 
 //************************************************************************************************/
 import Cards from './cards'; // Create this component for category details
+import DetailsPage from './details'; 
 
 const MenuStack = createStackNavigator();
 
@@ -21,6 +22,7 @@ function MenuStackScreen() {
     <MenuStack.Navigator>
       <MenuStack.Screen name="MenuPage" component={MenuPage} options={{ headerShown: false }} />
       <MenuStack.Screen name="CardsPage" component={Cards} />
+      <MenuStack.Screen name="DetailsPage" component={DetailsPage} />
     </MenuStack.Navigator>
   );
 }
