@@ -49,14 +49,14 @@ const OptionsModal = ({ visible, onClose, options, selectedOption, onSelect }) =
   );
 };
 
-const SlideInDetail = () => {
+const SlideInDetail = ({ selectedOptions, setSelectedOptions }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [options, setOptions] = useState([]);
   const [currentOptionType, setCurrentOptionType] = useState('');
-  const [selectedOptions, setSelectedOptions] = useState({
-    size: null,
-    colour: null,
-  });
+//   const [selectedOptions, setSelectedOptions] = useState({
+//     size: null,
+//     colour: null,
+//   });
 
   const handleSelect = (option) => {
     setSelectedOptions(prevOptions => {

@@ -13,7 +13,7 @@ const cardsData = [
     id: '1',
     title: 'PUFFER JACKET',
     imageUrl: [{ source: require('../assets/b2.jpg') }, { source: require('../assets/b1.jpg') }, { source: require('../assets/b2.jpg') }],
-    price: 100,
+    price: '2,500,000 LBP',
     description: 'A jacket typically has sleeves and fastens in the front or slightly on the side. A jacket is generally lighter, tighter-fitting, and less insulating than a coat, which is outerwear. Some jackets are fashionable, while others serve as protective clothing. ',
   },
 

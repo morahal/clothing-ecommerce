@@ -1,6 +1,6 @@
 // DetailsPage.js
-import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { useEffect, useRef } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -32,6 +32,19 @@ const DetailsPage = ({ route }) => {
   };
 
 
+
+
+const [selectedOptions, setSelectedOptions] = useState({ size: null, colour: null });
+// Add this inside DetailsPage component
+const checkSelectedOptionsAndAlert = () => {
+  if (selectedOptions.size && selectedOptions.colour) {
+    Alert.alert("Success", "Item added to cart successfully.");
+  } else {
+    Alert.alert("Missing Information", "Please select both a colour and size.");
+  }
+};
+
+
   return (
     <ScrollView style={styles.container}>
 
@@ -53,7 +66,7 @@ const DetailsPage = ({ route }) => {
 
       <View> 
       <Text style={styles.title}>{item.title}</Text>
-      <SlideInDetail />
+      <SlideInDetail selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions}/>
       </View>
 
       <View style = {styles.text}>
@@ -66,7 +79,7 @@ const DetailsPage = ({ route }) => {
       <Text style={styles.subtitle}>Price</Text>
       <Text style={styles.price}>${item.price}</Text>
       </View>
-      <TouchableOpacity> 
+      <TouchableOpacity onPress={checkSelectedOptionsAndAlert}> 
         <Text style={styles.item}> Add to Cart </Text>
       </TouchableOpacity>
       </View>
@@ -85,17 +98,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginBottom: 80,
 
-    borderWidth: 2, // Set the width of the border
-    borderColor: 'green', // Set the color of the border
-    borderStyle: 'solid',
+    // borderWidth: 2, // Set the width of the border
+    // borderColor: 'green', // Set the color of the border
+    // borderStyle: 'solid',
   },
   slideImage: {
     width: '100%',
     height: 400,
 
-    borderWidth: 2, // Set the width of the border
-    borderColor: 'red', // Set the color of the border
-    borderStyle: 'solid',
+    // borderWidth: 2, // Set the width of the border
+    // borderColor: 'red', // Set the color of the border
+    // borderStyle: 'solid',
   },
   title: {
     fontSize: 20,
@@ -124,9 +137,9 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    borderWidth: 2, // Set the width of the border
-    borderColor: 'yellow', // Set the color of the border
-    borderStyle: 'solid',
+    // borderWidth: 2, // Set the width of the border
+    // borderColor: 'yellow', // Set the color of the border
+    // borderStyle: 'solid',
     margin: 0,
     height: '100%',
     paddingBottom: 10,
@@ -136,9 +149,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent:'space-between',
-    borderWidth: 2, // Set the width of the border
-    borderColor: 'blue', // Set the color of the border
-    borderStyle: 'solid',
+    // borderWidth: 2, // Set the width of the border
+    // borderColor: 'blue', // Set the color of the border
+    // borderStyle: 'solid',
   },
 
   item: {
@@ -147,6 +160,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
     margin: 5,
+    marginRight: 10,
     fontWeight: '500',
     borderWidth: 1, // Set the width of the border
     borderColor: 'gray', // Set the color of the border
