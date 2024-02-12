@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { useBag } from './bagCntext';
 
 const SlideInDetail = ({selectedOptions, setSelectedOptions, modalVisible, setModalVisible}) => {
-
-//   const [modalVisible, setModalVisible] = useState(false);
+  // const { addToBag } = useBag(); // Use the addToBag function from the context
 
   // Define options
   const sizeOptions = ['S', 'M', 'L', 'XL'];
@@ -16,6 +16,17 @@ const SlideInDetail = ({selectedOptions, setSelectedOptions, modalVisible, setMo
       [type]: prev[type] === option ? null : option // Toggle selection
     }));
   };
+
+  // const handleAddToBag = () => {
+  //   // Add logic to fetch item details such as image and price
+  //   const itemDetails = {
+  //     size: selectedOptions.size,
+  //     color: selectedOptions.color,
+  //     // Add other details like image and price
+  //   };
+  //   addToBag(itemDetails);
+  //   setModalVisible(false); // Close the modal after adding to bag
+  // };
 
   return (
     <View style={styles.container}>

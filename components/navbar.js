@@ -15,7 +15,7 @@ const NavBar = () => {
       <TouchableOpacity onPress={() => navigation.navigate('Account')} style={styles.navItem}>
         <Text style={styles.navText}>ACCOUNT</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.navItem}>
+      <TouchableOpacity onPress={() => navigation.navigate('Bag')} style={styles.navItem}>
         <Text style={styles.navText}>BAG (0)</Text>
       </TouchableOpacity>
 

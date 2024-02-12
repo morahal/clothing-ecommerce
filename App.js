@@ -2,12 +2,13 @@ import React from 'react';
 import { View, Dimensions, StyleSheet,Animated, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import HomePage from './components/home';
 import MenuPage from './components/menu';
 import NavBar from './components/navbar';
 import AccountPage from './components/account';
 import MenuStackScreen from './components/menu';
+import CombinedProviders from './components/combinedProviders';
+import BagPage from './components/bag';
 
 const Tab = createBottomTabNavigator();
 
@@ -36,7 +37,8 @@ const headerHeight = 130; // Height of the header, adjust as needed
 const App = () => {
 
   return (
-    <NavigationContainer>
+    <CombinedProviders>
+          <NavigationContainer>
     <Tab.Navigator
       tabBar={props => <NavBar {...props} />}
       screenOptions={{
@@ -48,9 +50,10 @@ const App = () => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Menu" component={MenuStackScreen} />
       <Tab.Screen name="Account" component={AccountScreen} />
-      {/* <Tab.Screen name="Bag" component={BagScreen} /> */}
+      <Tab.Screen name="Bag" component={BagScreen} />
     </Tab.Navigator>
   </NavigationContainer>
+    </CombinedProviders>
   );
 };
 

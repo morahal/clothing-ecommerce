@@ -5,11 +5,13 @@ import Carousel from 'react-native-snap-carousel';
 import { useEffect, useRef } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import SlideInDetail from './slide-in-detail';
+import { useBag } from './bagCntext';
 
 const DetailsPage = ({ route }) => {
   const { item } = route.params;
-  const navigation = useNavigation(); // Hook to get access to navigation object
- 
+  const navigation = useNavigation(); 
+  const { dispatch } = useBag();
+  // Hook to get access to navigation object
   // console.log("Hellloooooooooooooooooooooooooooooooooooooooooooobjbhbhbvyvyvvbbvhb");
   // console.log(item.id, item.title, item.imageUrl, item.price);
   // Placeholder for the item's image URLs for the slideshow
@@ -35,28 +37,25 @@ const [modalVisible, setModalVisible] = useState(false);
 const [selectedOptions, setSelectedOptions] = useState({ size: null, colour: null });
 
 useEffect(() => {
-    // Check if both size and colour are selected
-    if (selectedOptions.size !== null && selectedOptions.colour !== null) {
-      // If both are selected, close the modal
-      setModalVisible(false);
-      setSelectedOptions({ size: null, colour: null })
-    }
-  }, [selectedOptions.size, selectedOptions.colour]);
+  if (selectedOptions.size !== null && selectedOptions.colour !== null) {
+    const itemToAdd = {
+      ...item,
+      size: selectedOptions.size, // Ensure size is a top-level attribute
+      colour: selectedOptions.colour, // Ensure colour is a top-level attribute
+    };
+
+    dispatch({ type: 'ADD_TO_BAG', payload: itemToAdd });
+
+    Alert.alert("Success", "Item added to bag successfully.");
+
+    setSelectedOptions({ size: null, colour: null }); // Reset selected options
+    setModalVisible(false); // Close modal if open
+  }
+}, [selectedOptions.size, selectedOptions.colour, dispatch, item]);
 
   useEffect(() => {
     console.log("Updated selectedOptions:", selectedOptions);
   }, [selectedOptions]);
-
-
-// Add this inside DetailsPage component
-// const checkSelectedOptionsAndAlert = () => {
-//   if (selectedOptions.size && selectedOptions.colour) {
-//     Alert.alert("Success", "Item added to cart successfully.");
-//   } else {
-//     Alert.alert("Missing Information", "Please select both a colour and size.");
-//   }
-// };
-
 
   return (
     <ScrollView style={styles.container}>
