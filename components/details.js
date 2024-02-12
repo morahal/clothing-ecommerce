@@ -111,21 +111,17 @@ const styles = StyleSheet.create({
   },
   slideImage: {
     width: '100%',
-    height: 400,
+    height: 450,
   },
   title: {
     fontSize: 18,
     fontWeight: '500',
     paddingLeft: 15,
-    paddingTop: 10,
-    paddingBottom: 5,
-    // marginLeft: 5,
-    // marginTop: 5,
-    
+    paddingTop: 10,    
   },
   price: {
     fontSize: 14,
-    
+    paddingLeft: 15,
   },
   description: {
     fontSize: 14,
@@ -133,6 +129,7 @@ const styles = StyleSheet.create({
   },
 
   subtitle:{
+    paddingLeft: 15,
     paddingBottom: 3,
     fontSize: 16,
     fontWeight: '500',
@@ -148,7 +145,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent:'space-between',
-    padding: 15,
+    // paddingLeft: 15,
+    width: '95%',
+    marginBottom: 10,
   },
 
   item: {

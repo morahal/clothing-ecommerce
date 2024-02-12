@@ -21,17 +21,13 @@ const SlideInDetail = ({selectedOptions, setSelectedOptions, modalVisible, setMo
     <View style={styles.container}>
 
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalView}>
-      
-          <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeModalButton}>
-              <Text style={styles.closeModalButtonText}>x</Text>
-            </TouchableOpacity>
 
             {/* Size Options */}
             <Text style={styles.sectionTitle}>Size</Text>
@@ -66,6 +62,9 @@ const SlideInDetail = ({selectedOptions, setSelectedOptions, modalVisible, setMo
                 </TouchableOpacity>
               ))}
             </View>
+            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeModalButton}>
+              <Text style={styles.closeModalButtonText}>x</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -81,8 +80,7 @@ const styles = StyleSheet.create({
   openModalButton: {
     backgroundColor: '#007bff',
     padding: 10,
-    borderRadius: 5,
-  },
+    },
   openModalButtonText: {
     color: '#ffffff',
     fontSize: 16,
@@ -96,7 +94,6 @@ const styles = StyleSheet.create({
   },
   modalView: {
     backgroundColor: 'white',
-    borderRadius: 20,
     padding: 20,
     alignItems: 'center',
     shadowColor: '#000',
@@ -137,20 +134,21 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   optionSelected: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   optionText: {
     color: 'black',
     fontSize: 13,
   },
   closeModalButton: {
-    position: 'absolute',
-    left:'105%',
+    // position: 'absolute',
+    // left:'105%',
+    marginTop: 15,
   },
 
   closeModalButtonText: {
     color: 'black',
-    fontSize: 22,
+    fontSize: 28,
   },
 
 });
