@@ -31,18 +31,31 @@ const DetailsPage = ({ route }) => {
     );
   };
 
-
-
-
+const [modalVisible, setModalVisible] = useState(false);
 const [selectedOptions, setSelectedOptions] = useState({ size: null, colour: null });
+
+useEffect(() => {
+    // Check if both size and colour are selected
+    if (selectedOptions.size !== null && selectedOptions.colour !== null) {
+      // If both are selected, close the modal
+      setModalVisible(false);
+      setSelectedOptions({ size: null, colour: null })
+    }
+  }, [selectedOptions.size, selectedOptions.colour]);
+
+  useEffect(() => {
+    console.log("Updated selectedOptions:", selectedOptions);
+  }, [selectedOptions]);
+
+
 // Add this inside DetailsPage component
-const checkSelectedOptionsAndAlert = () => {
-  if (selectedOptions.size && selectedOptions.colour) {
-    Alert.alert("Success", "Item added to cart successfully.");
-  } else {
-    Alert.alert("Missing Information", "Please select both a colour and size.");
-  }
-};
+// const checkSelectedOptionsAndAlert = () => {
+//   if (selectedOptions.size && selectedOptions.colour) {
+//     Alert.alert("Success", "Item added to cart successfully.");
+//   } else {
+//     Alert.alert("Missing Information", "Please select both a colour and size.");
+//   }
+// };
 
 
   return (
@@ -64,27 +77,25 @@ const checkSelectedOptionsAndAlert = () => {
       />
       </View>
 
+
       <View> 
-      <Text style={styles.title}>{item.title}</Text>
-      <SlideInDetail selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions}/>
+          <Text style={styles.title}>{item.title}</Text>
+          <SlideInDetail selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions}
+          modalVisible = {modalVisible} setModalVisible={setModalVisible} />
+          <View style={styles.buy}>
+              <View>
+                <Text style={styles.subtitle}>Price</Text>
+                <Text style={styles.price}>${item.price}</Text>
+              </View>
+              <TouchableOpacity onPress={() => {setModalVisible(true)}}>
+                <Text style={styles.item}> Add to Cart </Text>
+              </TouchableOpacity>
+          </View>
       </View>
 
       <View style = {styles.text}>
-
-      <Text style={styles.subtitle}>Description</Text>
-      <Text style={styles.description}>{item.description}</Text>
-
-      <View style={styles.buy}>
-      <View>
-      <Text style={styles.subtitle}>Price</Text>
-      <Text style={styles.price}>${item.price}</Text>
-      </View>
-      <TouchableOpacity onPress={checkSelectedOptionsAndAlert}> 
-        <Text style={styles.item}> Add to Cart </Text>
-      </TouchableOpacity>
-      </View>
-
-
+          <Text style={styles.title}>Description</Text>
+          <Text style={styles.description}>{item.description}</Text>
       </View>
 
 
@@ -97,49 +108,37 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     marginBottom: 80,
-
-    // borderWidth: 2, // Set the width of the border
-    // borderColor: 'green', // Set the color of the border
-    // borderStyle: 'solid',
   },
   slideImage: {
     width: '100%',
     height: 400,
-
-    // borderWidth: 2, // Set the width of the border
-    // borderColor: 'red', // Set the color of the border
-    // borderStyle: 'solid',
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginLeft: 5,
-    marginTop: 5,
+    fontSize: 18,
+    fontWeight: '500',
+    paddingLeft: 15,
+    paddingTop: 10,
+    paddingBottom: 5,
+    // marginLeft: 5,
+    // marginTop: 5,
     
   },
   price: {
-    fontSize: 16,
-    marginLeft: 5,
+    fontSize: 14,
     
   },
   description: {
-    fontSize: 16,
-    marginLeft: 5,
-   
+    fontSize: 14,
+    paddingLeft: 15,   
   },
 
   subtitle:{
-    marginLeft: 5,
-    marginTop: 5,
-    marginBottom: 5,
-    fontSize: 18,
+    paddingBottom: 3,
+    fontSize: 16,
     fontWeight: '500',
   },
 
   text: {
-    // borderWidth: 2, // Set the width of the border
-    // borderColor: 'yellow', // Set the color of the border
-    // borderStyle: 'solid',
     margin: 0,
     height: '100%',
     paddingBottom: 10,
@@ -149,18 +148,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent:'space-between',
-    // borderWidth: 2, // Set the width of the border
-    // borderColor: 'blue', // Set the color of the border
-    // borderStyle: 'solid',
+    padding: 15,
   },
 
   item: {
-    flex: 1,
+    // flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
-    margin: 5,
-    marginRight: 10,
+    padding: 8,
     fontWeight: '500',
     borderWidth: 1, // Set the width of the border
     borderColor: 'gray', // Set the color of the border

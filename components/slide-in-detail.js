@@ -1,177 +1,158 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 
-const ListItem = ({ title, onPress, selected }) => {
-    return (
-      <TouchableOpacity style={[styles.item, selected ? styles.selected : styles.notSelected]} onPress={onPress}>
-        <Text style={styles.title}>{title}</Text>
-      </TouchableOpacity>
-    );
-  };
+const SlideInDetail = ({selectedOptions, setSelectedOptions, modalVisible, setModalVisible}) => {
 
-const OptionsModal = ({ visible, onClose, options, selectedOption, onSelect }) => {
-  const handleSelect = (option) => {
-    onSelect(option);
-    onClose();
-  };
+//   const [modalVisible, setModalVisible] = useState(false);
 
-  return (
-    <Modal
-      animationType="fade"
-      transparent={true}
-      visible={visible}
-      onRequestClose={onClose}
-    >
-    <TouchableOpacity
-        style={styles.modalOverlay}
-        activeOpacity={1}
-        onPressOut={onClose}
-      >
-       <View style={styles.modalView}>
+  // Define options
+  const sizeOptions = ['S', 'M', 'L', 'XL'];
+  const colorOptions = ['Red', 'Green', 'Blue', 'Yellow'];
 
-        <SafeAreaView style={{ width: '100%' }}>
-          {options.map((option, index) => (
-          <TouchableOpacity
-          key={index}
-          style={[
-          styles.modalItem,
-          selectedOption === option ? styles.selectedOption : null, // Conditional style
-          ]}
-          onPress={() => handleSelect(option)} // handleSelect should be defined to update the selected option
-          >
-          <Text style={styles.modalText}>{option}</Text>
-          </TouchableOpacity>
-          ))}
-        </SafeAreaView>
-      </View>
-    </TouchableOpacity>
-  </Modal>
-  );
-};
-
-const SlideInDetail = ({ selectedOptions, setSelectedOptions }) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [options, setOptions] = useState([]);
-  const [currentOptionType, setCurrentOptionType] = useState('');
-//   const [selectedOptions, setSelectedOptions] = useState({
-//     size: null,
-//     colour: null,
-//   });
-
-  const handleSelect = (option) => {
-    setSelectedOptions(prevOptions => {
-      // Check if the option is already selected, if so, unselect it
-      if (prevOptions[currentOptionType] === option) {
-        return { ...prevOptions, [currentOptionType]: null };
-      } else {
-        return { ...prevOptions, [currentOptionType]: option };
-      }
-    });
-    setModalVisible(false);
-  };
-  
-  
-  const handlePress = (optionType) => {
-    // Define the options based on the type
-    const optionsByType = {
-      size: ['S', 'M', 'L', 'XL'],
-      colour: ['Red', 'Green', 'Blue', 'Yellow'],
-    };
-
-    setOptions(optionsByType[optionType]);
-    setCurrentOptionType(optionType);
-    setModalVisible(true);
+  // Handlers for selecting options
+  const handleSelectOption = (type, option) => {
+    setSelectedOptions(prev => ({
+      ...prev,
+      [type]: prev[type] === option ? null : option // Toggle selection
+    }));
   };
 
   return (
-    
     <View style={styles.container}>
-      <View style={styles.list}>
-        <ListItem title="SIZE" onPress={() => handlePress('size')} selected={selectedOptions.size !== null}/>
-        <ListItem title="COLOUR" onPress={() => handlePress('colour')} selected={selectedOptions.colour !== null}/>
-      </View>
 
-      <OptionsModal
+      <Modal
+        animationType="slide"
+        transparent={true}
         visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        options={options}
-        selectedOption={selectedOptions[currentOptionType]}
-        onSelect={handleSelect}
-      />
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalView}>
+      
+          <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeModalButton}>
+              <Text style={styles.closeModalButtonText}>x</Text>
+            </TouchableOpacity>
+
+            {/* Size Options */}
+            <Text style={styles.sectionTitle}>Size</Text>
+            <View style={styles.optionsContainer}>
+              {sizeOptions.map((option, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.optionButton,
+                    selectedOptions.size === option ? styles.optionSelected : {}
+                  ]}
+                  onPress={() => handleSelectOption('size', option)}
+                >
+                  <Text style={styles.optionText}>{option}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            {/* Color Options */}
+            <Text style={styles.sectionTitle}>Color</Text>
+            <View style={styles.optionsContainer}>
+              {colorOptions.map((option, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.optionButton,
+                    selectedOptions.colour === option ? styles.optionSelected : {}
+                  ]}
+                  onPress={() => handleSelectOption('colour', option)}
+                >
+                  <Text style={styles.optionText}>{option}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
-    //flex: 1,
-    // borderWidth: 2, // Set the width of the border
-    // borderColor: 'green', // Set the color of the border
-    // borderStyle: 'solid',
-    backgroundColor: 'white'
-    
+    alignItems: 'center',
+    marginTop: 20,
   },
-
-  list: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  openModalButton: {
+    backgroundColor: '#007bff',
     padding: 10,
-    //marginTop: 50,
+    borderRadius: 5,
   },
-
-  modalView: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-  },
-  modalItem: {
-    backgroundColor: 'white',
-    padding: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e1e1e1',
-  },
-  modalText: {
+  openModalButtonText: {
+    color: '#ffffff',
     fontSize: 16,
-    color: 'black',
   },
-
   modalOverlay: {
     flex: 1,
-    justifyContent: 'flex-end',
-    //backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
-  },
-
-  selectedOption: {
-    backgroundColor: 'gray', // Background color for selected option
-  },
-
-  item: {
-    flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-    padding: 5,
-    margin: 5,
-    borderWidth: 1, // Set the width of the border
-    borderColor: 'gray', // Set the color of the border
-     borderStyle: 'solid',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+
   },
-  title: {
+  modalView: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    width: '80%',
+
+    // borderWidth: 1, // Set the width of the border
+    // borderColor: 'red', // Set the color of the border
+    // borderStyle: 'solid',
+  },
+  sectionTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
-    fontSize: 12,
+    marginVertical: 10,
+  },
+  optionsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 10,
+
+    // borderWidth: 1, // Set the width of the border
+    // borderColor: 'blue', // Set the color of the border
+    // borderStyle: 'solid',
+  },
+  optionButton: {
+    borderWidth: 1,
+    borderColor: 'black',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 0,
+    margin: 5,
+  },
+  optionSelected: {
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  },
+  optionText: {
+    color: 'black',
+    fontSize: 13,
+  },
+  closeModalButton: {
+    position: 'absolute',
+    left:'105%',
   },
 
-  selected: {
-    backgroundColor:'rgba(0, 0, 0, 0.2)', // Background color for selected item
+  closeModalButtonText: {
+    color: 'black',
+    fontSize: 22,
   },
-  notSelected: {
-    backgroundColor: 'white', // Background color for not selected item
-  },
-  
+
 });
 
 export default SlideInDetail;
