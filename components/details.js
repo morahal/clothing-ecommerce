@@ -46,7 +46,7 @@ useEffect(() => {
       payload: { ...item,imageUrl: item.imageUrl[0].source, size: selectedOptions.size, colour: selectedOptions.colour },
     });
 
-    Alert.alert("Success", "Item added to bag successfully.");
+    // Alert.alert("Success", "Item added to bag successfully.");
     setSelectedOptions({ size: null, colour: null }); // Reset selected options
     setModalVisible(false); // Close modal
   }

@@ -30,11 +30,9 @@ const BagPage = () => {
       };
   
       const totalPrice = bagItems.reduce((acc, item) => {
-        // Remove any non-numeric characters except for the decimal point from the price
-        const cleanedPriceString = item.price.replace(/[^0-9.]+/g, '');
-        const itemPrice = parseFloat(cleanedPriceString);
-        // Multiply the cleaned price by the item's quantity
-        return acc + itemPrice * item.quantity;
+        // Since price is an integer, there's no need to use .replace
+        const itemPrice = item.price; // Directly use the integer value
+        return acc + itemPrice * (item.quantity || 1); // Use item.quantity or default to 1 if undefined
       }, 0);
       
 
@@ -65,11 +63,16 @@ const BagPage = () => {
       ))}
     </ScrollView>
 
-      <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>Total:</Text>
-        <Text style={styles.totalPrice}>${totalPrice.toFixed(2)}</Text>
-      </View>
-      <Button title="CONTINUE" onPress={() => {}} />
+        <View style={styles.bottom}>
+            <View style={styles.totalContainer}>
+            <Text style={styles.totalText}>Total:</Text>
+            <Text style={styles.totalPrice}>${totalPrice.toFixed(2)}</Text>
+            </View>
+                <TouchableOpacity style={styles.continueButton}>
+                    <Text style={styles.continueText}>CONTINUE</Text>
+                </TouchableOpacity>
+        </View>
+      {/* <Button title="CONTINUE" onPress={() => {}} /> */}
     </SafeAreaView>
     );
   };
@@ -151,31 +154,49 @@ const BagPage = () => {
         // marginRight: 15,
         width: 30,
       },
-      totalContainer: {
-        marginTop: 20,
-        padding: 10,
-        borderTopWidth: 1, // Add border on top as per the design
-        borderTopColor: '#e1e1e1', // Light grey color for the border
+      bottom: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderTopWidth: 1,
+        borderTopColor: 'white',
+        borderBottomWidth: 1,
+        borderBottomColor: 'white',
+        marginBottom: 50,
+      },
+      totalContainer: {
+        // marginTop: 20,
+        flex: 1,
+        padding: 10,
+        width: '50%',
+        borderRightWidth: 1, // Add border on top as per the design
+        borderRightColor: '#e1e1e1', // Light grey color for the border
+        flexDirection: 'row',
+        justifyContent: 'space-around',
         alignItems: 'center', // Align items vertically
+        
       },
       totalText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: 'white', // Ensure text is black
+        fontSize: 18,
+        fontWeight: '500',
+        color: 'white',
+        // paddingLeft: 20, // Ensure text is black
       },
       totalPrice: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: 'white', // Ensure text is black
+        color: 'white', 
+        paddingLeft: 15,// Ensure text is black
       },
-      continueButton: {
-        marginTop: 20,
-        backgroundColor: 'white', // Change button color to black
-        color: 'white', // Change button text color to white
-        padding: 10,
-        borderRadius: 0, // Remove border radius for square button
+
+      continueButton:{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      continueText:{
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '500',
       },
       removeButton: {
         marginLeft: 'auto', // This will push the button to the end of the container

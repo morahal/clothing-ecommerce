@@ -1,9 +1,16 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useBag } from './bagCntext';
 
 const NavBar = () => {
   const navigation = useNavigation(); 
+  const { state } = useBag(); // Destructure to get the state from the context
+  const bagItems = state.bagItems;
+
+  // Calculate the total quantity of items in the bag
+  const totalItems = bagItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
+
   return (
     <View style={styles.navBar}>
       <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.navItem}>
@@ -16,7 +23,7 @@ const NavBar = () => {
         <Text style={styles.navText}>ACCOUNT</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Bag')} style={styles.navItem}>
-        <Text style={styles.navText}>BAG (0)</Text>
+        <Text style={styles.navText}>BAG ({totalItems})</Text>
       </TouchableOpacity>
 
     </View>
