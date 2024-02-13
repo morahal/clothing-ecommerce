@@ -37,6 +37,13 @@ const SlideInDetail = ({selectedOptions, setSelectedOptions, modalVisible, setMo
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
+         {/* <TouchableOpacity
+        //style={styles.modalOverlay}
+        //activeOpacity={1}
+        onPressOut={() => setModalVisible(false)}
+      > */}
+
+      
         <View style={styles.modalOverlay}>
           <View style={styles.modalView}>
 
@@ -78,6 +85,7 @@ const SlideInDetail = ({selectedOptions, setSelectedOptions, modalVisible, setMo
             </TouchableOpacity>
           </View>
         </View>
+        {/* </TouchableOpacity> */}
       </Modal>
     </View>
   );

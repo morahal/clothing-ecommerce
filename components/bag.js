@@ -1,7 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, Button, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Button, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { useBag } from './bagCntext';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+const { width: viewportWidth, height: viewportHeight } = Dimensions.get('screen');
+const navbarHeight = 80;
 
 const BagPage = () => {
     const { state, dispatch } = useBag();
@@ -38,6 +41,9 @@ const BagPage = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <View style={styles.titleContainer}>
+                <Text style={styles.pageTitle}>SHOPPING BAG</Text>
+            </View>        
         <ScrollView style={styles.itemsContainer}>
         {bagItems.map((item, index) => (
         <View key={item.selectionId} style={styles.itemContainer}>
@@ -72,7 +78,6 @@ const BagPage = () => {
                     <Text style={styles.continueText}>CONTINUE</Text>
                 </TouchableOpacity>
         </View>
-      {/* <Button title="CONTINUE" onPress={() => {}} /> */}
     </SafeAreaView>
     );
   };
@@ -81,8 +86,20 @@ const BagPage = () => {
     container: {
         flex: 1,
         backgroundColor: 'black',
-        paddingTop: 25,
+        paddingTop: 15,
+        marginBottom: navbarHeight,
+    
       },
+      titleContainer: {
+        justifyContent: 'center', // Center vertically
+        alignItems: 'center', // Center horizontally
+        paddingBottom: 16, // Add some padding for aesthetics
+    },
+    pageTitle: {
+        fontSize: 20,
+        color: 'white',
+        fontWeight: 'bold',
+    },
       itemsContainer:{
         borderTopWidth: 0.5,
         borderTopColor: 'white',
@@ -161,7 +178,6 @@ const BagPage = () => {
         borderTopColor: 'white',
         borderBottomWidth: 1,
         borderBottomColor: 'white',
-        marginBottom: 50,
       },
       totalContainer: {
         // marginTop: 20,
@@ -200,7 +216,7 @@ const BagPage = () => {
       },
       removeButton: {
         marginLeft: 'auto', // This will push the button to the end of the container
-        paddingHorizontal: 8,
+        paddingHorizontal: 10,
         paddingVertical: 4,
         borderColor: 'white',
         borderWidth: 1,

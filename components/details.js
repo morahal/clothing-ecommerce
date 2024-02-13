@@ -19,13 +19,23 @@ const DetailsPage = ({ route }) => {
   //const imageUrls = item.imageUrl;
 
   const carouselRef = useRef(null); // Reference for the carousel
-  const { width: viewportWidth } = Dimensions.get('window');
+  const { width: viewportWidth } = Dimensions.get('screen');
 
   useEffect(() => {
     navigation.setOptions({ 
       title: item.title,
       headerBackTitleVisible: true,
-      headerTintColor: 'black', });
+      headerTintColor: 'black',
+      headerTitleAlign: 'center', 
+      headerTitleStyle: {
+        fontSize: 16, // Set your desired font size here
+        // You can also add other font styling properties here, like fontFamily, fontWeight, etc.
+      },
+      headerBackTitleStyle: {
+        fontSize: 14, // Set your desired font size for the back button title
+        // You can also add other font styling properties here, like fontFamily, fontWeight, etc., for the back button title
+      },
+     });
   }, [item, navigation]);
 
   const renderItem = ({ item, index }) => {
@@ -121,6 +131,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 14,
     paddingLeft: 15,
+    fontWeight: 'bold',
   },
   description: {
     fontSize: 14,

@@ -1,12 +1,12 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Dimensions, FlatList, StyleSheet, View, TextInput } from 'react-native';
+import { Dimensions, FlatList, StyleSheet, View, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import Card from './card'; // Assuming Card is in the same directory
 import SlideInMenu from './slide-in-menu';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 const navbarHeight = 80;
-const {width: viewPortWidth, height: viewPortHeight} = Dimensions.get('window');
+const {width: viewPortWidth, height: viewPortHeight} = Dimensions.get('screen');
 
 const cardsData = [
   {
@@ -79,7 +79,16 @@ const Cards = () => {
       title: category,
       headerBackTitle: 'Menu',
       headerBackTitleVisible: true,
-      headerTintColor: 'black', });
+      headerTintColor: 'black', 
+      headerTitleAlign: 'center', 
+      headerTitleStyle: {
+        fontSize: 16, // Set your desired font size here
+        // You can also add other font styling properties here, like fontFamily, fontWeight, etc.
+      },
+      headerBackTitleStyle: {
+        fontSize: 14, // Set your desired font size for the back button title
+        // You can also add other font styling properties here, like fontFamily, fontWeight, etc., for the back button title
+      },});
   }, [category, navigation]);
 
    // State to hold the search term
@@ -109,7 +118,11 @@ const Cards = () => {
 
   return (
   <>
- <View style= {styles.all}> 
+   <KeyboardAvoidingView
+    behavior={Platform.OS === "ios" ? "padding" : null}
+    style={{ flex: 1 }}
+  >
+      <View style= {styles.all}> 
    <SlideInMenu />
    <TextInput
           style={styles.searchBar}
@@ -125,6 +138,8 @@ const Cards = () => {
       style={styles.container}
     />
     </View>
+
+  </KeyboardAvoidingView>
    </>
    
   );
@@ -132,17 +147,8 @@ const Cards = () => {
 
 const styles = StyleSheet.create({
   container: {
-    //flex: 1,
-    //overflow: 'auto',
     backgroundColor: 'white',
     width: viewPortWidth,
-    //borderBlockColor: 'black',
-    //marginTop: 50,
-
-    // borderWidth: 2, // Set the width of the border
-    // borderColor: 'red', // Set the color of the border
-    // borderStyle: 'solid',
-
     marginBottom: navbarHeight,
     // Add some padding if needed
   },
@@ -152,8 +158,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    backgroundColor: 'white'
-
+    backgroundColor: 'white',
     // borderWidth: 2, // Set the width of the border
     // borderColor: 'yelllow', // Set the color of the border
     // borderStyle: 'solid',

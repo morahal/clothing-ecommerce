@@ -134,17 +134,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   modalItem: {
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     padding: 16,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e1e1e1',
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#e1e1e1',
   },
   modalText: {
     fontSize: 16,
-    color: 'black',
+    color: 'white',
   },
 
   modalOverlay: {

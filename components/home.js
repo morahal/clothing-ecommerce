@@ -4,7 +4,7 @@ import Carousel from 'react-native-snap-carousel';
 import NavBar from '../components/navbar';
  // Correct the import path as necessary
 
-const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
+const { width: viewportWidth, height: viewportHeight } = Dimensions.get('screen');
 const navbarHeight = 80; // Height of the navbar
 
 const HomePage = ({ navigation }) => {
