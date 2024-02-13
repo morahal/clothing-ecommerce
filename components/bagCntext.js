@@ -11,10 +11,53 @@ const BagContext = createContext();
 // Reducer function to manage actions
 function bagReducer(state, action) {
   switch (action.type) {
+    // case 'ADD_TO_BAG':
+    //   return { ...state, bagItems: [...state.bagItems, action.payload] };
     case 'ADD_TO_BAG':
-      return { ...state, bagItems: [...state.bagItems, action.payload] };
+      const existingItemIndex = state.bagItems.findIndex(
+        (item) => item.id === action.payload.id && item.size === action.payload.size && item.colour === action.payload.colour
+      );
+      if (existingItemIndex !== -1) {
+        console.log(existingItemIndex);
+        // Increment quantity of existing item
+        let newBagItems = [...state.bagItems];
+        newBagItems[existingItemIndex] = {
+          ...newBagItems[existingItemIndex],
+          quantity: newBagItems[existingItemIndex].quantity + 1,
+        };
+        console.log(newBagItems[existingItemIndex].quantity);
+        return { ...state, bagItems: newBagItems };
+      } else {
+        // Add new item
+        return { ...state, bagItems: [...state.bagItems, { ...action.payload, quantity: 1 }] };
+      }
     case 'CLEAR_BAG':
       return { ...state, bagItems: [] };
+    case 'REMOVE_ITEM':
+        const { id, size, colour } = action.payload;
+        return {
+          ...state,
+          bagItems: state.bagItems.filter(bagItem =>
+            !(bagItem.id === id && bagItem.size === size && bagItem.colour === colour)
+          ),
+        };
+    case 'INCREMENT_QUANTITY':
+      return {
+        ...state,
+        bagItems: state.bagItems.map(item =>
+          item.id === action.payload.id && item.size === action.payload.size && item.colour === action.payload.colour ?
+            { ...item, quantity: item.quantity + 1 } : item
+        ),
+      };
+
+    case 'DECREMENT_QUANTITY':
+      return {
+        ...state,
+        bagItems: state.bagItems.map(item =>
+          item.id === action.payload.id && item.size === action.payload.size && item.colour === action.payload.colour ?
+            { ...item, quantity: Math.max(item.quantity - 1, 1) } : item // Ensures quantity does not go below 1
+        ),
+      };
     default:
       return state;
   }

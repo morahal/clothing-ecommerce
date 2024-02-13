@@ -10,9 +10,10 @@ import { useBag } from './bagCntext';
 const DetailsPage = ({ route }) => {
   const { item } = route.params;
   const navigation = useNavigation(); 
-  const { dispatch } = useBag();
+  const { dispatch, state } = useBag();
+  const bagItems = state.bagItems; // Assuming your bagItems are stored in the state object of your context
+
   // Hook to get access to navigation object
-  // console.log("Hellloooooooooooooooooooooooooooooooooooooooooooobjbhbhbvyvyvvbbvhb");
   // console.log(item.id, item.title, item.imageUrl, item.price);
   // Placeholder for the item's image URLs for the slideshow
   //const imageUrls = item.imageUrl;
@@ -36,22 +37,21 @@ const DetailsPage = ({ route }) => {
 const [modalVisible, setModalVisible] = useState(false);
 const [selectedOptions, setSelectedOptions] = useState({ size: null, colour: null });
 
-useEffect(() => {
-  if (selectedOptions.size !== null && selectedOptions.colour !== null) {
-    const itemToAdd = {
-      ...item,
-      size: selectedOptions.size, // Ensure size is a top-level attribute
-      colour: selectedOptions.colour, // Ensure colour is a top-level attribute
-    };
 
-    dispatch({ type: 'ADD_TO_BAG', payload: itemToAdd });
+useEffect(() => {
+  if (selectedOptions.size && selectedOptions.colour) {
+    // Directly dispatch ADD_TO_BAG action. Reducer will handle if it needs to add a new item or increment quantity
+    dispatch({
+      type: 'ADD_TO_BAG',
+      payload: { ...item,imageUrl: item.imageUrl[0].source, size: selectedOptions.size, colour: selectedOptions.colour },
+    });
 
     Alert.alert("Success", "Item added to bag successfully.");
-
     setSelectedOptions({ size: null, colour: null }); // Reset selected options
-    setModalVisible(false); // Close modal if open
+    setModalVisible(false); // Close modal
   }
-}, [selectedOptions.size, selectedOptions.colour, dispatch, item]);
+}, [selectedOptions.size, selectedOptions.colour,item, dispatch]);
+
 
   useEffect(() => {
     console.log("Updated selectedOptions:", selectedOptions);
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 8,
-    fontWeight: '500',
+    fontWeight: '700',
     borderWidth: 1, // Set the width of the border
     borderColor: 'gray', // Set the color of the border
     borderStyle: 'solid',
