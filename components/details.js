@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     height: 450,
   },
   title: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '500',
     paddingLeft: 15,
     paddingTop: 10,    
@@ -134,8 +134,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   description: {
-    fontSize: 14,
-    paddingLeft: 15,   
+    fontSize: 12,
+    paddingLeft: 15,
+    paddingTop: 5,
+    paddingRight: 10,
   },
 
   subtitle:{

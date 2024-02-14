@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef }  from 'react';
-import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import NavBar from '../components/navbar';
  // Correct the import path as necessary
@@ -53,6 +53,12 @@ const HomePage = ({ navigation }) => {
         inactiveSlideOpacity={1}
         onSnapToItem={(index) => setActiveIndex(index)}
       />
+      <TouchableOpacity
+          style={styles.signinButton}
+          onPress={() => navigation.navigate('Login')}
+        >
+          <Text style={styles.signinButtonText}>Sign In</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -89,6 +95,25 @@ const styles = StyleSheet.create({
       fontSize: 130,
       fontWeight: 'bold',
       color: '#fff',
+    },
+    signinButton: {
+      position: 'absolute',
+      bottom: 30,
+      left: 0,
+      right: 0,
+      backgroundColor: 'transparent',
+      padding: 7,
+      // justifyContent: 'center',
+      // alignItems: 'center',
+      borderWidth: 0.5,
+      borderColor: 'white',
+      margin: 15,
+    },
+    signinButtonText: {
+      color: 'white',
+      fontSize: 16,
+      textAlign: 'right',
+      // fontWeight: 'bold',
     },
 
 });

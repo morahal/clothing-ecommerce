@@ -86,17 +86,17 @@ const BagPage = () => {
     container: {
         flex: 1,
         backgroundColor: 'black',
-        paddingTop: 15,
+        paddingTop: 15,    
         marginBottom: navbarHeight,
-    
       },
       titleContainer: {
         justifyContent: 'center', // Center vertically
         alignItems: 'center', // Center horizontally
         paddingBottom: 16, // Add some padding for aesthetics
+
     },
     pageTitle: {
-        fontSize: 20,
+        fontSize: 18,
         color: 'white',
         fontWeight: 'bold',
     },
@@ -192,16 +192,16 @@ const BagPage = () => {
         
       },
       totalText: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: '500',
         color: 'white',
         // paddingLeft: 20, // Ensure text is black
       },
       totalPrice: {
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: 'bold',
         color: 'white', 
-        paddingLeft: 15,// Ensure text is black
+        // paddingLeft: 15,// Ensure text is black
       },
 
       continueButton:{
