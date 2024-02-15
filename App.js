@@ -18,22 +18,6 @@ const Stack = createStackNavigator();
 const { height: viewportHeight } = Dimensions.get('window');
 const navbarHeight = 80; // Adjust as needed
 
-function HomeScreen() {
-  return <HomePage />;
-}
-
-function MenuScreen() {
-  return <MenuPage />;
-}
-
-function AccountScreen() {
-  return <AccountPage />;
-}
-
-function BagScreen() {
-  return <BagPage />;
-}
-
 const headerHeight = 130; // Height of the header, adjust as needed
 
 function MainTabNavigator() {
