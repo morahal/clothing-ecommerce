@@ -40,7 +40,8 @@ function MainTabNavigator() {
 
 function RootStack() {
   return (
-    <Stack.Navigator mode="modal" screenOptions={{ headerShown: false }}>
+    // mode="modal"
+    <Stack.Navigator screenOptions={{ headerShown: false, presentation: 'modal'}}>
       <Stack.Screen name="Main" component={MainTabNavigator} />
       <Stack.Screen name="SignUp" component={SignUpPage} />
       <Stack.Screen name="Login" component={LoginPage} />

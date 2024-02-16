@@ -1,17 +1,37 @@
 // DetailsPage.js
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, Dimensions, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, Dimensions, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { useEffect, useRef } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import SlideInDetail from './slide-in-detail';
 import { useBag } from './bagCntext';
+import { AntDesign } from '@expo/vector-icons';
+
+//added
+const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
+
 
 const DetailsPage = ({ route }) => {
-  const { item } = route.params;
+  //const { item } = route.params;
+  const { item, origin, category } = route.params;
   const navigation = useNavigation(); 
   const { dispatch, state } = useBag();
   const bagItems = state.bagItems; // Assuming your bagItems are stored in the state object of your context
+
+  const handleBackPress = () => {
+    // Navigate back based on the origin
+    if (origin === 'FavoritesTab') {
+      console.log(origin);
+      navigation.navigate('FavoritesTab');
+    } else if (origin === 'CardsPage') {
+      console.log(origin);
+      navigation.navigate('CardsPage', {category});
+    } else {
+      // Default back action if origin is not specified
+      navigation.goBack();
+    }
+  };
 
   // Hook to get access to navigation object
   // console.log(item.id, item.title, item.imageUrl, item.price);
@@ -19,23 +39,14 @@ const DetailsPage = ({ route }) => {
   //const imageUrls = item.imageUrl;
 
   const carouselRef = useRef(null); // Reference for the carousel
+  
   const { width: viewportWidth } = Dimensions.get('screen');
 
   useEffect(() => {
     navigation.setOptions({ 
-      title: item.title,
-      headerBackTitleVisible: true,
-      headerTintColor: 'black',
-      headerTitleAlign: 'center', 
-      headerTitleStyle: {
-        fontSize: 16, // Set your desired font size here
-        // You can also add other font styling properties here, like fontFamily, fontWeight, etc.
-      },
-      headerBackTitleStyle: {
-        fontSize: 14, // Set your desired font size for the back button title
-        // You can also add other font styling properties here, like fontFamily, fontWeight, etc., for the back button title
-      },
+      headerShown: false, // This hides the entire header
      });
+      
   }, [item, navigation]);
 
   const renderItem = ({ item, index }) => {
@@ -67,10 +78,32 @@ useEffect(() => {
     console.log("Updated selectedOptions:", selectedOptions);
   }, [selectedOptions]);
 
+
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  const toggleFavorite = () => {
+    setIsFavorited(!isFavorited);
+    // Add additional logic if needed to handle adding/removing from a global favorites list
+  };
+
   return (
+    <SafeAreaView>
+   
     <ScrollView style={styles.container}>
 
     <View>
+    <TouchableOpacity style={styles.backButton} underlayColor="transparent" activeOpacity={1}> 
+      <Text style={styles.buttonText}><AntDesign name="leftcircleo" size={24} color="black" onPress={handleBackPress} /></Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity style={styles.favoriteButton} onPress={toggleFavorite}>
+         {isFavorited ? (
+          <AntDesign name="heart" size={26} color="red" />
+        ) : (
+          <AntDesign name="hearto" size={26} color="black" />
+        )}
+    </TouchableOpacity> 
+
       <Carousel
       ref={carouselRef}
       data={item.imageUrl}
@@ -88,7 +121,9 @@ useEffect(() => {
 
 
       <View> 
+          <View style = {styles.titleContainer}>
           <Text style={styles.title}>{item.title}</Text>
+          </View>
           <SlideInDetail selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions}
           modalVisible = {modalVisible} setModalVisible={setModalVisible} />
           <View style={styles.buy}>
@@ -109,21 +144,21 @@ useEffect(() => {
 
 
     </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: 'white',
-    marginBottom: 80,
+    height: viewportHeight - 80,
   },
   slideImage: {
     width: '100%',
     height: 450,
   },
   title: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '500',
     paddingLeft: 15,
     paddingTop: 10,    
@@ -131,13 +166,10 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 14,
     paddingLeft: 15,
-    fontWeight: 'bold',
   },
   description: {
-    fontSize: 12,
-    paddingLeft: 15,
-    paddingTop: 5,
-    paddingRight: 10,
+    fontSize: 14,
+    paddingLeft: 15,   
   },
 
   subtitle:{
@@ -172,6 +204,105 @@ const styles = StyleSheet.create({
     borderColor: 'gray', // Set the color of the border
     borderStyle: 'solid',
   },
+
+  backButton: {
+    position: 'absolute',
+    left: 20,
+    top: 20,
+    zIndex: 10,
+  },
+  buttonText:{
+    fontSize: 18,
+  },
+
+  favoriteButton:{
+    position: 'absolute',
+    zIndex: 10,
+    top: 20,
+    right: 20,
+
+  }
 });
+
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: 'white',
+//     marginBottom: 80,
+//   },
+//   slideImage: {
+//     width: '100%',
+//     height: 450,
+//   },
+//   title: {
+//     fontSize: 16,
+//     fontWeight: '500',
+//     paddingLeft: 15,
+//     paddingTop: 10,    
+//   },
+//   price: {
+//     fontSize: 14,
+//     paddingLeft: 15,
+//     fontWeight: 'bold',
+//   },
+//   description: {
+//     fontSize: 12,
+//     paddingLeft: 15,
+//     paddingTop: 5,
+//     paddingRight: 10,
+//   },
+
+//   subtitle:{
+//     paddingLeft: 15,
+//     paddingBottom: 3,
+//     fontSize: 16,
+//     fontWeight: '500',
+//   },
+
+//   text: {
+//     margin: 0,
+//     height: '100%',
+//     paddingBottom: 10,
+//   },
+
+//   buy:{
+//     display: 'flex',
+//     flexDirection: 'row',
+//     justifyContent:'space-between',
+//     // paddingLeft: 15,
+//     width: '95%',
+//     marginBottom: 10,
+//   },
+
+//   item: {
+//     // flex: 1,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     padding: 8,
+//     fontWeight: '700',
+//     borderWidth: 1, // Set the width of the border
+//     borderColor: 'gray', // Set the color of the border
+//     borderStyle: 'solid',
+//   },
+
+//   backButton: {
+//     position: 'absolute',
+//     left: 20,
+//     top: 20,
+//     zIndex: 10,
+//   },
+//   buttonText:{
+//     fontSize: 18,
+//   },
+
+//   favoriteButton:{
+//     position: 'absolute',
+//     zIndex: 10,
+//     top: 20,
+//     right: 20,
+
+//   }
+// });
 
 export default DetailsPage;

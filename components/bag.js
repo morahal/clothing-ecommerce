@@ -38,7 +38,6 @@ const BagPage = () => {
         return acc + itemPrice * (item.quantity || 1); // Use item.quantity or default to 1 if undefined
       }, 0);
       
-
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.titleContainer}>
@@ -46,7 +45,9 @@ const BagPage = () => {
             </View>        
         <ScrollView style={styles.itemsContainer}>
         {bagItems.map((item, index) => (
-        <View key={item.selectionId} style={styles.itemContainer}>
+        // <View key={item.selectionId} style={styles.itemContainer}>
+        // changed key to remove warning
+        <View key={item.selectionId || `${item.id}-${item.size}-${item.colour}-${index}`} style={styles.itemContainer}>
         <Image source={item.imageUrl} style={styles.image} />
           <View style={styles.itemDetails}>
             <Text style={styles.itemTitle}>{item.title}</Text>

@@ -112,7 +112,8 @@ const Cards = () => {
       title={item.title}
       imageUrl={item.imageUrl[0].source}
       price = {item.price}
-      onPress={() => navigation.navigate('DetailsPage', { item })}
+      //onPress={() => navigation.navigate('DetailsPage', { item })}
+      onPress={() => navigation.navigate('DetailsPage', { item, origin: 'CardsPage', category })}
     />
   );
 
