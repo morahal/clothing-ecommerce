@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { useBag } from './bagCntext';
+import { useNavigation } from '@react-navigation/native';
 
-const SlideInDetail = ({selectedOptions, setSelectedOptions, modalVisible, setModalVisible}) => {
+
+const SlideInDetail = ({ selectedOptions, setSelectedOptions, modalVisible, setModalVisible}) => {
   // const { addToBag } = useBag(); // Use the addToBag function from the context
-
+  const navigation = useNavigation();
   // Define options
   const sizeOptions = ['S', 'M', 'L', 'XL'];
-  const colorOptions = ['RED', 'GREEN', 'BLUE', 'YELLOW', 'BEIGE', 'BLACK'];
+  const colorOptions = ['RED', 'GREEN', 'BLUE', 'YELLOW'];
 
   // Handlers for selecting options
   const handleSelectOption = (type, option) => {
@@ -72,6 +74,14 @@ const SlideInDetail = ({selectedOptions, setSelectedOptions, modalVisible, setMo
             </View>
             <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeModalButton}>
               <Text style={styles.closeModalButtonText}>x</Text>
+            </TouchableOpacity>
+
+
+            <TouchableOpacity style={styles.closeModalButton} onPress={() => {
+              navigation.navigate('SuggestionsPage');
+              setModalVisible(false);
+              }}>
+              <Text> Suggestions </Text>
             </TouchableOpacity>
           </View>
         </View>

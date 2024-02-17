@@ -12,6 +12,7 @@ import BagPage from './components/bag';
 import SignUpPage from './components/signup';
 import LoginPage from './components/login';
 import PaymentScreen from './components/payment';
+import SuggestionsPage from './components/suggestions';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -47,6 +48,7 @@ function RootStack() {
       <Stack.Screen name="SignUp" component={SignUpPage} />
       <Stack.Screen name="Login" component={LoginPage} />
       <Stack.Screen name="Payment" component={PaymentScreen} />
+      <Stack.Screen name="SuggestionsPage" component={SuggestionsPage} />
     </Stack.Navigator>
   );
 }
