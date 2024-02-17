@@ -87,7 +87,7 @@ useEffect(() => {
   };
 
   return (
-    <SafeAreaView style = {{borderWidth: 2, borderColor: 'blue', height: viewportHeight - 80}}>
+    <SafeAreaView>
    
     <ScrollView style={styles.container}>
 
@@ -223,86 +223,5 @@ const styles = StyleSheet.create({
 
   }
 });
-
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: 'white',
-//     marginBottom: 80,
-//   },
-//   slideImage: {
-//     width: '100%',
-//     height: 450,
-//   },
-//   title: {
-//     fontSize: 16,
-//     fontWeight: '500',
-//     paddingLeft: 15,
-//     paddingTop: 10,    
-//   },
-//   price: {
-//     fontSize: 14,
-//     paddingLeft: 15,
-//     fontWeight: 'bold',
-//   },
-//   description: {
-//     fontSize: 12,
-//     paddingLeft: 15,
-//     paddingTop: 5,
-//     paddingRight: 10,
-//   },
-
-//   subtitle:{
-//     paddingLeft: 15,
-//     paddingBottom: 3,
-//     fontSize: 16,
-//     fontWeight: '500',
-//   },
-
-//   text: {
-//     margin: 0,
-//     height: '100%',
-//     paddingBottom: 10,
-//   },
-
-//   buy:{
-//     display: 'flex',
-//     flexDirection: 'row',
-//     justifyContent:'space-between',
-//     // paddingLeft: 15,
-//     width: '95%',
-//     marginBottom: 10,
-//   },
-
-//   item: {
-//     // flex: 1,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     padding: 8,
-//     fontWeight: '700',
-//     borderWidth: 1, // Set the width of the border
-//     borderColor: 'gray', // Set the color of the border
-//     borderStyle: 'solid',
-//   },
-
-//   backButton: {
-//     position: 'absolute',
-//     left: 20,
-//     top: 20,
-//     zIndex: 10,
-//   },
-//   buttonText:{
-//     fontSize: 18,
-//   },
-
-//   favoriteButton:{
-//     position: 'absolute',
-//     zIndex: 10,
-//     top: 20,
-//     right: 20,
-
-//   }
-// });
 
 export default DetailsPage;

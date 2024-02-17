@@ -1,139 +1,198 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Alert,ActivityIndicator } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-const SuggestionsPage = ({navigation}) => {
-  const [age, setAge] = useState('');
-  const [height, setHeight] = useState('');
-  const [weight, setWeight] = useState('');
-  const [notes, setNotes] = useState('');
 
-  return (
-    <SafeAreaView style={styles.container}>
-    {/* <View style ={{alignItems: 'center'}}> */}
-        <Text style = {styles.title}> Size Measurements</Text>
-    {/* </View> */}
-      <ScrollView contentContainerStyle={styles.content}>
-        {/* <Text style={styles.label}>Age</Text> */}
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          value={age}
-          onChangeText={setAge}
-          placeholder="Enter your age"
-        />
+const SuggestionsPage = () => {
+    const [age, setAge] = useState('');
+    const [height, setHeight] = useState('');
+    const [weight, setWeight] = useState('');
+    const [showResults, setShowResults] = useState(false);
+    const [loading, setLoading] = useState(false); // State for loading indicator
+    const navigation = useNavigation();
 
-        {/* <Text style={styles.label}>Height (cm)</Text> */}
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          value={height}
-          onChangeText={setHeight}
-          placeholder="Enter your height"
-        />
+    const validateInputs = () => {
+        // Check if any of the fields is empty
+        return age.trim() && height.trim() && weight.trim();
+    };
 
-        {/* <Text style={styles.label}>Weight (kg)</Text> */}
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          value={weight}
-          onChangeText={setWeight}
-          placeholder="Enter your weight"
-        />
+    const handleSeeResult = () => {
+        if (!validateInputs()) {
+            // If validation fails, show an alert and do not proceed
+            Alert.alert("Invalid Input", "Please fill in all fields.");
+            return;
+        }
 
-        {/* <Text style={styles.label}>Notes</Text> */}
-        {/* <TextInput
-          style={[styles.input, styles.textArea]}
-          multiline={true}
-          numberOfLines={4}
-          value={notes}
-          onChangeText={setNotes}
-          placeholder="Enter any notes"
-        /> */}
+        setLoading(true); // Show the loading indicator
 
-        <TouchableOpacity style={styles.button} onPress = {() => navigation.navigate('ResultPage')}>
-          <Text style={styles.buttonText}>SEE RESULT</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </SafeAreaView>
-  );
+        // Use a timeout to simulate a loading period
+        setTimeout(() => {
+          setLoading(false); // Hide the loading indicator
+          setShowResults(true); // Show the results
+        }, 2000); // 300
+    };
+
+    return (
+        <SafeAreaView style={styles.container}>
+
+            {!showResults && !loading && (
+                <View styles={styles.measureView}>
+
+                    <Text style={styles.title}> Size Measurements</Text>
+                    <ScrollView contentContainerStyle={styles.content}>
+                        <TextInput
+                            style={styles.input}
+                            keyboardType="numeric"
+                            value={age}
+                            onChangeText={setAge}
+                            placeholder="Enter your age"
+                        />
+
+                        {/* <Text style={styles.label}>Height (cm)</Text> */}
+                        <TextInput
+                            style={styles.input}
+                            keyboardType="numeric"
+                            value={height}
+                            onChangeText={setHeight}
+                            placeholder="Enter your height"
+                        />
+
+                        {/* <Text style={styles.label}>Weight (kg)</Text> */}
+                        <TextInput
+                            style={styles.input}
+                            keyboardType="numeric"
+                            value={weight}
+                            onChangeText={setWeight}
+                            placeholder="Enter your weight"
+                        />
+
+
+                        <TouchableOpacity style={styles.button} onPress={handleSeeResult}>
+                            <Text style={styles.buttonText}>SEE RESULT</Text>
+                        </TouchableOpacity>
+                    </ScrollView>
+                </View>
+            )}
+
+            {loading && (
+
+            <View style={styles.loading}>
+                <ActivityIndicator size="large" color="black"/>
+            </View>
+            )}
+
+            {showResults && !loading &&  (
+                <View style={styles.resultContainer}>
+                    <Text style={styles.resultTitle}>YOUR SUGGESTED SIZE IS</Text>
+
+                    <Text style={styles.size}>M</Text>
+
+                    <TouchableOpacity style={styles.resultButton} onPress={() => navigation.goBack()}>
+                        <Text style={styles.buttonText}>OK</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+
+        </SafeAreaView>
+
+
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    // borderWidth: 2,
-    // borderColor: 'blue',
-    //marginTop: 200,
-    padding:0,
-    
-  },
-  content: {
-    padding: 20,
-  },
-  label: {
-    fontSize: 18,
-    marginBottom: 10,
-    marginTop: 20,
-    color: 'black',
-  },
-//   input: {
-//     backgroundColor: '#F0F0F0',
-//     borderRadius: 10,
-//     padding: 15,
-//     fontSize: 16,
-//     color: 'black',
-//   },
-input: {
-    height: 40,
-    borderBottomWidth: 1,
-    borderBottomColor: '#000',
-    marginBottom: 24,
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: 'top',
-  },
-//   button: {
-//     backgroundColor: 'black',
-//     padding: 15,
-//     borderRadius: 10,
-//     marginTop: 30,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-button: {
-    marginTop: 30, // Space from the last input to the button
-    backgroundColor: '#000', // Button background color
-    paddingVertical: 15, // Vertical padding for the button
-    borderRadius: 25, // Rounded corners for the button
-    justifyContent: 'center', // Center content inside the button
-    alignItems: 'center', // Center content inside the button horizontally
-  },
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+        padding: 0,
+        justifyContent: 'center',
+    },
+    content: {
+        padding: 20,
+    },
+    label: {
+        fontSize: 18,
+        marginBottom: 10,
+        marginTop: 20,
+        color: 'black',
+    },
 
-//   buttonText: {
-//     color: 'white',
-//     fontSize: 18,
-//   },
+    input: {
+        height: 40,
+        borderBottomWidth: 1,
+        borderBottomColor: '#000',
+        marginBottom: 24,
+    },
+    textArea: {
+        height: 100,
+        textAlignVertical: 'top',
+    },
 
-buttonText: {
-    color: '#fff', // Text color for the button
-    fontSize: 14, // Button text size
-    fontWeight: 'bold', // Button text weight
-  },
+    button: {
+        marginTop: 30, // Space from the last input to the button
+        backgroundColor: '#000', // Button background color
+        paddingVertical: 15, // Vertical padding for the button
+        borderRadius: 25, // Rounded corners for the button
+        justifyContent: 'center', // Center content inside the button
+        alignItems: 'center', // Center content inside the button horizontally
+    },
 
-  title: {
-    alignSelf: 'center',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 30,
-    marginTop: 200,
-     // Space between header and form inputs
-    // alignSelf: 'center', // Center header text
-    color: '#000', // Text color for the header
-    // borderWidth: 2,
-    // borderColor: 'red',
-  }
+    buttonText: {
+        color: '#fff', // Text color for the button
+        fontSize: 14, // Button text size
+        fontWeight: 'bold', // Button text weight
+    },
+
+    title: {
+        alignSelf: 'center',
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 30,
+        // marginTop: 200,
+        color: '#000', // Text color for the header
+
+    },
+    resultContainer: {
+        flex: 1,
+        backgroundColor: "white",
+        padding: 0,
+        justifyContent: "center", tifyContent: "center",
+        // display: 'none',
+    },
+
+    resultButton: {
+        marginTop: 100, // Space from the last input to the button
+        backgroundColor: "#000", // Button background color
+        paddingVertical: 15, // Vertical padding for the button
+        borderRadius: 25, // Rounded corners for the button
+        justifyContent: "center", // Center content inside the button
+        alignItems: "center",
+        width: '80%',
+        alignSelf: 'center' // Center content inside the button horizontally
+    },
+
+    buttonText: {
+        color: "#fff", // Text color for the button
+        fontSize: 18, // Button text size
+        fontWeight: "bold", // Button text weight
+    },
+
+    resultTitle: {
+        alignSelf: "center",
+        fontSize: 24,
+        fontWeight: "bold",
+        marginBottom: 30,
+        color: "#000",
+    },
+    size: {
+        fontSize: 40,
+        alignSelf: "center",
+        fontWeight: "bold",
+        marginTop: 30,
+    },
+    loading:{
+        alignSelf: 'center',
+        justifyContent: 'center',
+    }
 
 });
 

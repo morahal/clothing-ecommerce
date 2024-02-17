@@ -4,7 +4,7 @@ import { useBag } from './bagCntext';
 import { useNavigation } from '@react-navigation/native';
 
 
-const SlideInDetail = ({ selectedOptions, setSelectedOptions, modalVisible, setModalVisible}) => {
+const SlideInDetail = ({ selectedOptions, setSelectedOptions, modalVisible, setModalVisible }) => {
   // const { addToBag } = useBag(); // Use the addToBag function from the context
   const navigation = useNavigation();
   // Define options
@@ -29,13 +29,13 @@ const SlideInDetail = ({ selectedOptions, setSelectedOptions, modalVisible, setM
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-         {/* <TouchableOpacity
+        {/* <TouchableOpacity
         //style={styles.modalOverlay}
         //activeOpacity={1}
         onPressOut={() => setModalVisible(false)}
       > */}
 
-      
+
         <View style={styles.modalOverlay}>
           <View style={styles.modalView}>
 
@@ -72,17 +72,20 @@ const SlideInDetail = ({ selectedOptions, setSelectedOptions, modalVisible, setM
                 </TouchableOpacity>
               ))}
             </View>
+
+            <TouchableOpacity style={styles.sugesstionBtn} onPress={() => {
+              navigation.navigate('SuggestionsPage');
+              setModalVisible(false);
+            }}>
+              <Text style={styles.suggestionText}>RECOMMENDED SIZE</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeModalButton}>
               <Text style={styles.closeModalButtonText}>x</Text>
             </TouchableOpacity>
 
 
-            <TouchableOpacity style={styles.closeModalButton} onPress={() => {
-              navigation.navigate('SuggestionsPage');
-              setModalVisible(false);
-              }}>
-              <Text> Suggestions </Text>
-            </TouchableOpacity>
+
           </View>
         </View>
         {/* </TouchableOpacity> */}
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
   openModalButton: {
     backgroundColor: '#007bff',
     padding: 10,
-    },
+  },
   openModalButtonText: {
     color: '#ffffff',
     fontSize: 16,
@@ -167,8 +170,20 @@ const styles = StyleSheet.create({
 
   closeModalButtonText: {
     color: 'black',
-    fontSize: 28,
+    fontSize: 32,
   },
+  sugesstionBtn:{
+    borderWidth: 1,
+    // backgroundColor: 'black',
+    color: 'white',
+    borderRadius: 20,
+    marginTop: 25,
+  },
+  suggestionText:{
+    fontSize: 14,
+    fontWeight: 'bold',
+    padding: 8,
+  }
 
 });
 
