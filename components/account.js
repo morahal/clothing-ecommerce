@@ -47,7 +47,6 @@ const AccountPage = () => {
     <>
    
     <SafeAreaView style={styles.container}>
-
       <View style={styles.accountBar}>
       <TouchableOpacity onPress={() => navigation.navigate('Favorites')} style={styles.tab}>
         <Text style={styles.tabText}>FAVORITES</Text>
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     // borderWidth: 2,
     // borderColor: 'red',
-    height: viewportHeight - 80,
+     height: viewportHeight - 80,
   },
   accountBar: {
     flexDirection: 'row',

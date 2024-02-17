@@ -87,7 +87,7 @@ useEffect(() => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style = {{borderWidth: 2, borderColor: 'blue', height: viewportHeight - 80}}>
    
     <ScrollView style={styles.container}>
 

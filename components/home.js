@@ -37,7 +37,7 @@ const HomePage = ({ navigation }) => {
   };
 
   return (
-    <View style={{ }}>
+    <View>
         <View style={styles.header}>
             <Text style={styles.headerText}>ROSSONERO</Text>
         </View>
@@ -71,6 +71,8 @@ const styles = StyleSheet.create({
     slide: {
       width: viewportWidth,
       height: viewportHeight - navbarHeight, // Full height of the carousel slide
+      // borderWidth: 2,
+      // borderColor: 'green',
       
     },
     carouselImage: {

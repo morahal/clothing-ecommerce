@@ -13,6 +13,7 @@ import SignUpPage from './components/signup';
 import LoginPage from './components/login';
 import PaymentScreen from './components/payment';
 import SuggestionsPage from './components/suggestions';
+import ResultPage from './components/size-result';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -43,13 +44,24 @@ function MainTabNavigator() {
 function RootStack() {
   return (
     // mode="modal"
-    <Stack.Navigator screenOptions={{ headerShown: false, presentation: 'modal'}}>
-      <Stack.Screen name="Main" component={MainTabNavigator} />
-      <Stack.Screen name="SignUp" component={SignUpPage} />
-      <Stack.Screen name="Login" component={LoginPage} />
-      <Stack.Screen name="Payment" component={PaymentScreen} />
-      <Stack.Screen name="SuggestionsPage" component={SuggestionsPage} />
-    </Stack.Navigator>
+    // <Stack.Navigator screenOptions={{ headerShown: false, presentation: 'modal'}}>
+    //   <Stack.Screen name="Main" component={MainTabNavigator} />
+    //   <Stack.Screen name="SignUp" component={SignUpPage} />
+    //   <Stack.Screen name="Login" component={LoginPage} />
+    //   <Stack.Screen name="Payment" component={PaymentScreen} />
+    //   <Stack.Screen name="SuggestionsPage" component={SuggestionsPage} />
+    //   <Stack.Screen name="ResultPage" component={ResultPage} />
+    // </Stack.Navigator>
+
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Screen name="Main" component={MainTabNavigator} />
+  <Stack.Screen name="SignUp" component={SignUpPage} options={{ presentation: 'modal' }} />
+  <Stack.Screen name="Login" component={LoginPage} options={{ presentation: 'modal' }} />
+  <Stack.Screen name="Payment" component={PaymentScreen} options={{ presentation: 'fullScreenModal' }} />
+  <Stack.Screen name="SuggestionsPage" component={SuggestionsPage} options={{ presentation: 'modal' }} />
+  <Stack.Screen name="ResultPage" component={ResultPage} options={{ presentation: 'modal' }} />
+  </Stack.Navigator>
+
   );
 }
 
