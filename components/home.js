@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef }  from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import NavBar from '../components/navbar';
  // Correct the import path as necessary
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('screen');
@@ -40,7 +39,7 @@ const HomePage = ({ navigation }) => {
   return (
     <View style={{ }}>
         <View style={styles.header}>
-            <Text style={styles.headerText}>ZARA</Text>
+            <Text style={styles.headerText}>ROSSONERO</Text>
         </View>
       <Carousel
         ref={carouselRef}
@@ -57,7 +56,7 @@ const HomePage = ({ navigation }) => {
           style={styles.signinButton}
           onPress={() => navigation.navigate('Login')}
         >
-          <Text style={styles.signinButtonText}>Sign In</Text>
+          <Text style={styles.signinButtonText}>LOGIN</Text>
       </TouchableOpacity>
     </View>
   );
@@ -92,7 +91,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'transparent', // Assuming a transparent background for the header
     },
     headerText: {
-      fontSize: 130,
+      fontSize: 60,
       fontWeight: 'bold',
       color: '#fff',
     },
@@ -103,15 +102,13 @@ const styles = StyleSheet.create({
       right: 0,
       backgroundColor: 'transparent',
       padding: 7,
-      // justifyContent: 'center',
-      // alignItems: 'center',
       borderWidth: 0.5,
       borderColor: 'white',
       margin: 15,
     },
     signinButtonText: {
       color: 'white',
-      fontSize: 16,
+      fontSize: 14,
       textAlign: 'right',
       // fontWeight: 'bold',
     },

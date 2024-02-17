@@ -39,7 +39,7 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>ZARA</Text>
+      <Text style={styles.logo}>ROSSONERO</Text>
       <Text style={styles.title}>LOGIN</Text>
       <TextInput
         style={styles.input}
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   logo: {
-    fontSize: 100,
+    fontSize: 45,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 48,

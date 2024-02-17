@@ -7,7 +7,7 @@ const SlideInDetail = ({selectedOptions, setSelectedOptions, modalVisible, setMo
 
   // Define options
   const sizeOptions = ['S', 'M', 'L', 'XL'];
-  const colorOptions = ['Red', 'Green', 'Blue', 'Yellow'];
+  const colorOptions = ['RED', 'GREEN', 'BLUE', 'YELLOW', 'BEIGE', 'BLACK'];
 
   // Handlers for selecting options
   const handleSelectOption = (type, option) => {
@@ -17,16 +17,6 @@ const SlideInDetail = ({selectedOptions, setSelectedOptions, modalVisible, setMo
     }));
   };
 
-  // const handleAddToBag = () => {
-  //   // Add logic to fetch item details such as image and price
-  //   const itemDetails = {
-  //     size: selectedOptions.size,
-  //     color: selectedOptions.color,
-  //     // Add other details like image and price
-  //   };
-  //   addToBag(itemDetails);
-  //   setModalVisible(false); // Close the modal after adding to bag
-  // };
 
   return (
     <View style={styles.container}>

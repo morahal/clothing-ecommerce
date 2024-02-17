@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, Button, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { View, Text, Button, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Alert } from 'react-native';
 import { useBag } from './bagCntext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('screen');
 const navbarHeight = 80;
 
-const BagPage = () => {
+const BagPage = ({ navigation }) => {
     const { state, dispatch } = useBag();
     const { bagItems } = state;
 
@@ -34,9 +34,18 @@ const BagPage = () => {
   
       const totalPrice = bagItems.reduce((acc, item) => {
         // Since price is an integer, there's no need to use .replace
-        const itemPrice = item.price; // Directly use the integer value
+        const itemPrice = item.price; 
         return acc + itemPrice * (item.quantity || 1); // Use item.quantity or default to 1 if undefined
       }, 0);
+
+      const handleContinue = () =>{
+          if(bagItems.length === 0){
+            Alert.alert('Cannot Proceed\n Bag is empty');
+          }
+          else{
+            navigation.navigate('Payment');
+          }
+      }
       
     return (
         <SafeAreaView style={styles.container}>
@@ -75,7 +84,7 @@ const BagPage = () => {
             <Text style={styles.totalText}>Total:</Text>
             <Text style={styles.totalPrice}>${totalPrice.toFixed(2)}</Text>
             </View>
-                <TouchableOpacity style={styles.continueButton}>
+                <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
                     <Text style={styles.continueText}>CONTINUE</Text>
                 </TouchableOpacity>
         </View>

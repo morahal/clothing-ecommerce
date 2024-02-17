@@ -11,6 +11,7 @@ import CombinedProviders from './components/combinedProviders';
 import BagPage from './components/bag';
 import SignUpPage from './components/signup';
 import LoginPage from './components/login';
+import PaymentScreen from './components/payment';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -45,6 +46,7 @@ function RootStack() {
       <Stack.Screen name="Main" component={MainTabNavigator} />
       <Stack.Screen name="SignUp" component={SignUpPage} />
       <Stack.Screen name="Login" component={LoginPage} />
+      <Stack.Screen name="Payment" component={PaymentScreen} />
     </Stack.Navigator>
   );
 }
@@ -58,35 +60,5 @@ const App = () => {
     </CombinedProviders>
   );
 };
-
-// const App = () => {
-
-//   return (
-//     <CombinedProviders>
-//           <NavigationContainer>
-//     <Tab.Navigator
-//       tabBar={props => <NavBar {...props} />}
-//       screenOptions={{
-//         tabBarHideOnKeyboard: true,
-//         tabBarStyle: { height: navbarHeight },
-//         headerShown: false,
-//       }}
-//     >
-//       <Tab.Screen name="Home" component={HomeScreen} />
-//       <Tab.Screen name="Menu" component={MenuStackScreen} />
-//       <Tab.Screen name="Account" component={AccountScreen} />
-//       <Tab.Screen name="Bag" component={BagScreen} />
-//     </Tab.Navigator>
-//   </NavigationContainer>
-//     </CombinedProviders>
-//   );
-// };
-
-
-// const styles = StyleSheet.create({
-//   pageContainer: {
-//     height: viewportHeight - navbarHeight,
-//   },
-// });
 
 export default App;

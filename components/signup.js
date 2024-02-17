@@ -189,47 +189,6 @@ const SignUpPage = ({ navigation }) => {
         onChangeText={setMobilePhone}
         keyboardType="phone-pad"
       />
-      {/* <Text style={styles.title}>DATA OF YOUR CARD</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Card number"
-        value={cardNumber}
-        onChangeText={setCardNumber}
-        keyboardType="numeric"
-      />
-      <TouchableOpacity onPress={showDatePicker}>
-        <TextInput
-          style={styles.input}
-          placeholder="Expiry Date (MM/YYYY)"
-          value={expiryDate} 
-          editable={false} 
-        />
-      </TouchableOpacity>
-      {isDatePickerVisible && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode="date"
-          display="spinner" 
-          onChange={onDateChange}
-          minimumDate={new Date()}
-          maximumDate={new Date(new Date().setFullYear(new Date().getFullYear() + 10))}
-        />
-      )}
-      <TextInput
-        style={styles.input}
-        placeholder="Card holder"
-        value={cardHolder}
-        onChangeText={setCardHolder}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="CVV2 security code"
-        value={cvv}
-        onChangeText={setCvv}
-        keyboardType="numeric"
-        maxLength={4} // CVV2 codes are typically 3 or 4 digits
-      /> */}
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
@@ -243,6 +202,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingHorizontal: 20,
     backgroundColor: '#fff',
+    justifyContent: 'center',
   },
   title: {
     fontSize: 22,
