@@ -39,7 +39,7 @@ const HomePage = ({ navigation }) => {
   return (
     <View>
         <View style={styles.header}>
-            <Text style={styles.headerText}>ROSSONERO</Text>
+            <Text style={styles.headerText}>ROSSO</Text>
         </View>
       <Carousel
         ref={carouselRef}
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'transparent', // Assuming a transparent background for the header
     },
     headerText: {
-      fontSize: 60,
+      fontSize: 110,
       fontWeight: 'bold',
       color: '#fff',
     },

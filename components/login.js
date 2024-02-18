@@ -39,7 +39,7 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>ROSSONERO</Text>
+      <Text style={styles.logo}>ROSSO</Text>
       <Text style={styles.title}>LOGIN</Text>
       <TextInput
         style={styles.input}

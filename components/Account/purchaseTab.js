@@ -98,8 +98,8 @@ const { width: viewportWidth, height: viewportHeight } = Dimensions.get('screen'
 const styles = StyleSheet.create({
     purchasesContainer: {
             flex: 1,
-            borderTopWidth: 1,
-            borderTopColor: 'black',
+            // borderTopWidth: 1,
+            // borderTopColor: 'black',
             marginBottom: 80,
           },
           purchaseItem: {
