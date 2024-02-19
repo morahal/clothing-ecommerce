@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'transparent', // Assuming a transparent background for the header
     },
     headerText: {
-      fontSize: 110,
+      fontSize: 100,
       fontWeight: 'bold',
       color: '#fff',
     },
