@@ -1,21 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Alert} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { BASE_URL } from '../constants';
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('screen');
 const navbarHeight = 80; // Height of the navbar
 
-
-// Assuming your backend is running locally and accessible via localhost,
-// replace 'your_backend_url' with your actual backend URL,
-// and ensure your mobile device/emulator can access it.
-const BASE_URL = 'http://172.20.10.2:8000/categories/';
-
-// const categories = {
-//   Men: ['T-SHIRT', 'SHIRTS', 'JEANS', 'TROUSERS','JACKETS','SHORTS', 'SWEATERS & HOODIES','SUITS','BAGS','SHOES'],
-//   Women: ['T-SHIRT', 'SHIRTS','SWEATSHIRTS', 'JEANS', 'TROUSERS','SHORTS & SKIRTS' , 'JACKETS','DRESSES', 'TOPS', 'SWEATERS & HOODIES','BAGS','SHOES'],
-//   Kids: ['T-SHIRT', 'SHIRTS', 'JEANS', 'TROUSERS','SHORTS','JACKETS', 'SWEATERS & HOODIES','BAGS','SHOES','DRESSES','SHORTS & SKIRTS' ,'TOPS'],
-// };
 
 //************************************************************************************************/
 import Cards from './cards'; // Create this component for category details
@@ -44,7 +33,7 @@ const MenuPage = ({ navigation }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(`${BASE_URL}${selectedTab.toUpperCase()}/`);
+        const response = await fetch(`${BASE_URL}/categories/${selectedTab.toUpperCase()}/`);
         const data = await response.json();
         setCategories(data);
       } catch (error) {
@@ -58,24 +47,8 @@ const MenuPage = ({ navigation }) => {
 //***************************************** *****************************************//
 
   const handlePressCategoryItem = (category) => {
-    navigation.navigate('CardsPage', { category });
+    navigation.navigate('CardsPage', { category, selectedTab });
   };
-
-  //const [selectedTab, setSelectedTab] = useState('Men'); // Default selected tab
-
-
-  // const TabContent = () => {
-  //   const categoryList = categories[selectedTab];
-  //   return (
-  //     <ScrollView>
-  //     {categoryList.map((category, index) => (
-  //       <TouchableOpacity key={index} style={styles.categoryItem} onPress={() => handlePressCategoryItem(category)}>
-  //         <Text style={styles.categoryText}>{category}</Text>
-  //       </TouchableOpacity>
-  //     ))}
-  //   </ScrollView>
-  //   );
-  // };
 
 
   return (

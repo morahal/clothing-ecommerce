@@ -7,6 +7,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import SlideInDetail from './slide-in-detail';
 import { useBag } from './bagCntext';
 import { AntDesign } from '@expo/vector-icons';
+import { BASE_URL } from '../constants';
 
 //added
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
@@ -14,7 +15,7 @@ const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window'
 
 const DetailsPage = ({ route }) => {
   //const { item } = route.params;
-  const { item, origin, category } = route.params;
+  const { item, origin, category, selectedTab } = route.params;
   const navigation = useNavigation(); 
   const { dispatch, state } = useBag();
   const bagItems = state.bagItems; // Assuming your bagItems are stored in the state object of your context
@@ -22,21 +23,18 @@ const DetailsPage = ({ route }) => {
   const handleBackPress = () => {
     // Navigate back based on the origin
     if (origin === 'FavoritesTab') {
-      console.log(origin);
+     // console.log(origin);
       navigation.navigate('FavoritesTab');
     } else if (origin === 'CardsPage') {
-      console.log(origin);
-      navigation.navigate('CardsPage', {category});
+      //console.log(origin);
+      navigation.navigate('CardsPage', {category, selectedTab});
+      //console.log(category);
+      //console.log("hello",selectedTab);
     } else {
       // Default back action if origin is not specified
       navigation.goBack();
     }
   };
-
-  // Hook to get access to navigation object
-  // console.log(item.id, item.title, item.imageUrl, item.price);
-  // Placeholder for the item's image URLs for the slideshow
-  //const imageUrls = item.imageUrl;
 
   const carouselRef = useRef(null); // Reference for the carousel
   
@@ -49,11 +47,21 @@ const DetailsPage = ({ route }) => {
       
   }, [item, navigation]);
 
+  /*************************************** */
+
+  const images = [
+    { source: { uri: `${BASE_URL}${item.image1}` } },
+    { source: { uri: `${BASE_URL}${item.image2}` } },
+    { source: { uri: `${BASE_URL}${item.image3}` } },
+  ];
+
   const renderItem = ({ item, index }) => {
     return (
       <Image source={item.source} style={styles.slideImage} />
     );
   };
+
+  /*************************************** */
 
 const [modalVisible, setModalVisible] = useState(false);
 const [selectedOptions, setSelectedOptions] = useState({ size: null, colour: null });
@@ -106,7 +114,7 @@ useEffect(() => {
 
       <Carousel
       ref={carouselRef}
-      data={item.imageUrl}
+      data={images}
       renderItem={renderItem}
       sliderWidth={viewportWidth}
       itemWidth={viewportWidth}

@@ -1,78 +1,19 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Dimensions, FlatList, StyleSheet, View, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { Dimensions, FlatList, StyleSheet, View, TextInput, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import Card from './card'; // Assuming Card is in the same directory
 import SlideInMenu from './slide-in-menu';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { BASE_URL } from '../constants';
 
 const navbarHeight = 80;
 const {width: viewPortWidth, height: viewPortHeight} = Dimensions.get('screen');
-
-const cardsData = [
-  {
-    id: '1',
-    title: 'PUFFER JACKET',
-    imageUrl: [{ source: require('../assets/b2.jpg') }, { source: require('../assets/b1.jpg') }, { source: require('../assets/b2.jpg') }],
-    price: 290,
-    description: 'A jacket typically has sleeves and fastens in the front or slightly on the side. A jacket is generally lighter, tighter-fitting, and less insulating than a coat, which is outerwear. Some jackets are fashionable, while others serve as protective clothing. ',
-  },
-
-  {
-    id: '2',
-    title: 'Blazer Lightning',
-    imageUrl: [{ source: require('../assets/b2.jpg') }, { source: require('../assets/b1.jpg') }, { source: require('../assets/b2.jpg') }],
-    price: 100,
-  },
-
-  {
-    id: '3',
-    title: 'Boneless Jacket',
-    imageUrl: [{ source: require('../assets/b2.jpg') }, { source: require('../assets/b1.jpg') }, { source: require('../assets/b2.jpg') }],
-    price: 100,
-  },
-
-  {
-    id: '4',
-    title: 'BLACK COAT',
-    imageUrl: [{ source: require('../assets/b2.jpg') }, { source: require('../assets/b1.jpg') }, { source: require('../assets/b2.jpg') }],
-    price: 100,
-  },
-
-  {
-    id: '5',
-    title: 'BLACK COAT',
-    imageUrl: [{ source: require('../assets/b2.jpg') }, { source: require('../assets/b1.jpg') }, { source: require('../assets/b2.jpg') }],
-    price: 100,
-  },
-
-  {
-    id: '6',
-    title: 'BLACK COAT',
-    imageUrl: [{ source: require('../assets/b2.jpg') }, { source: require('../assets/b1.jpg') }, { source: require('../assets/b2.jpg') }],
-    price: 100,
-  },
-
-  {
-    id: '7',
-    title: 'BASIC PUFFER JACKET',
-    imageUrl: [{ source: require('../assets/b2.jpg') }, { source: require('../assets/b1.jpg') }, { source: require('../assets/b2.jpg') }],
-    price: 100,
-  },
-  {
-    id: '8',
-    title: 'BASIC PUFFER JACKET',
-    imageUrl: [{ source: require('../assets/b2.jpg') }, { source: require('../assets/b1.jpg') }, { source: require('../assets/b2.jpg') }],
-    price: 100,
-  },
-
-
-];
 
 const Cards = () => {
 
   const navigation = useNavigation(); // Hook to get access to navigation object
   const route = useRoute(); // Hook to get access to route object
-  const { category } = route.params; 
+  const { category, selectedTab } = route.params;
 
   useEffect(() => {
     navigation.setOptions({ 
@@ -91,6 +32,37 @@ const Cards = () => {
       },});
   }, [category, navigation]);
 
+
+
+
+
+
+  // added by me //
+  const [cardsData, setCardsData] = useState([]);
+  useEffect(() => {
+    fetchCardsData();
+  }, [category, selectedTab]);
+  const fetchCardsData = async () => {
+    try {
+      //const response = await fetch(`${BASE_URL}`);
+      //console.log(selectedTab);
+      const response = await fetch(`${BASE_URL}/items?section=${selectedTab.toUpperCase()}&category=${category.toUpperCase()}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else {
+        const json = await response.json();
+        setCardsData(json);
+        //console.log(json);
+      }
+    } catch (error) {
+      Alert.alert('Error', `Could not fetch cards: ${error.message}`);
+      console.error(error);
+    }
+  };
+  
+  // @@@@ by me //
+
+
    // State to hold the search term
    const [searchTerm, setSearchTerm] = useState('');
    // State to hold the filtered data
@@ -99,23 +71,26 @@ const Cards = () => {
    useEffect(() => {
     if (searchTerm) {
       const newData = cardsData.filter((item) =>
-        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredData(newData);
     } else {
       setFilteredData(cardsData);
     }
-  }, [searchTerm]);
+  }, [searchTerm, cardsData]);
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }) => {
+    const imageUrl = `${BASE_URL}${item.image1}`;
+    return (
     <Card
-      title={item.title}
-      imageUrl={item.imageUrl[0].source}
+      title={item.name}
+      imageUrl={{ uri: imageUrl }}
       price = {item.price}
       //onPress={() => navigation.navigate('DetailsPage', { item })}
-      onPress={() => navigation.navigate('DetailsPage', { item, origin: 'CardsPage', category })}
+      onPress={() => navigation.navigate('DetailsPage', { item, origin: 'CardsPage', category, selectedTab})}
     />
-  );
+  )
+  };
 
   return (
   <>
