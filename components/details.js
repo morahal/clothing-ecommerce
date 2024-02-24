@@ -69,12 +69,13 @@ const [selectedOptions, setSelectedOptions] = useState({ size: null, colour: nul
 
 useEffect(() => {
   if (selectedOptions.size && selectedOptions.colour) {
+    
     // Directly dispatch ADD_TO_BAG action. Reducer will handle if it needs to add a new item or increment quantity
     dispatch({
       type: 'ADD_TO_BAG',
-      payload: { ...item,imageUrl: item.imageUrl[0].source, size: selectedOptions.size, colour: selectedOptions.colour },
+      payload: { ...item, s_ize: selectedOptions.size, colour: selectedOptions.colour },
     });
-
+    //console.log("hrlloo",bagItems);
     // Alert.alert("Success", "Item added to bag successfully.");
     setSelectedOptions({ size: null, colour: null }); // Reset selected options
     setModalVisible(false); // Close modal

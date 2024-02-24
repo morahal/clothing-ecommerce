@@ -15,7 +15,7 @@ function bagReducer(state, action) {
     //   return { ...state, bagItems: [...state.bagItems, action.payload] };
     case 'ADD_TO_BAG':
       const existingItemIndex = state.bagItems.findIndex(
-        (item) => item.id === action.payload.id && item.size === action.payload.size && item.colour === action.payload.colour
+        (item) => item.id === action.payload.id && item.s_ize === action.payload.size && item.colour === action.payload.colour
       );
       if (existingItemIndex !== -1) {
         console.log(existingItemIndex);
@@ -38,15 +38,19 @@ function bagReducer(state, action) {
         return {
           ...state,
           bagItems: state.bagItems.filter(bagItem =>
-            !(bagItem.id === id && bagItem.size === size && bagItem.colour === colour)
+            !(bagItem.id === id && bagItem.s_ize === size && bagItem.colour === colour)
           ),
         };
     case 'INCREMENT_QUANTITY':
+
       return {
         ...state,
         bagItems: state.bagItems.map(item =>
-          item.id === action.payload.id && item.size === action.payload.size && item.colour === action.payload.colour ?
-            { ...item, quantity: item.quantity + 1 } : item
+          item.id === action.payload.id && item.s_ize === action.payload.size && item.colour === action.payload.colour ?
+            { ...item, 
+              //quantity: item.quantity + 1
+              quantity: item.quantity < item.remaining_quantity ? item.quantity + 1 : item.quantity // Only increment if below max
+            } : item
         ),
       };
 
@@ -54,7 +58,7 @@ function bagReducer(state, action) {
       return {
         ...state,
         bagItems: state.bagItems.map(item =>
-          item.id === action.payload.id && item.size === action.payload.size && item.colour === action.payload.colour ?
+          item.id === action.payload.id && item.s_ize === action.payload.size && item.colour === action.payload.colour ?
             { ...item, quantity: Math.max(item.quantity - 1, 1) } : item // Ensures quantity does not go below 1
         ),
       };
