@@ -81,7 +81,7 @@ const BagPage = ({ navigation }) => {
               <Text style={styles.itemTitle}>{item.title}</Text>
               <Text
                 style={styles.itemSizeColor}
-              >{`${item.s_ize}   |   ${item.colour}`}</Text>
+              >{`${item.size}   |   ${item.color}`}</Text>
               <Text style={styles.itemPrice}>{`$ ${item.price}`}</Text>
               <View style={styles.quantityContainer}>
                 <TouchableOpacity

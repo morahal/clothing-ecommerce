@@ -35,33 +35,35 @@ const Cards = () => {
 
 
 
+const [cardsData, setCardsData] = useState([]);
 
+// ********************************* For category and section filtering ***********************************//
 
-  // added by me //
-  const [cardsData, setCardsData] = useState([]);
-  useEffect(() => {
-    fetchCardsData();
-  }, [category, selectedTab]);
-  const fetchCardsData = async () => {
-    try {
-      //const response = await fetch(`${BASE_URL}`);
-      //console.log(selectedTab);
-      const response = await fetch(`${BASE_URL}/items?section=${selectedTab.toUpperCase()}&category=${category.toUpperCase()}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } else {
-        const json = await response.json();
-        setCardsData(json);
-        //console.log(json);
-      }
-    } catch (error) {
-      Alert.alert('Error', `Could not fetch cards: ${error.message}`);
-      console.error(error);
-    }
-  };
+  // useEffect(() => {
+  //   fetchCardsData();
+  // }, [category, selectedTab]);
+
+  // const fetchCardsData = async () => {
+  //   try {
+  //     //const response = await fetch(`${BASE_URL}`);
+  //     //console.log(selectedTab);
+  //     const response = await fetch(`${BASE_URL}/items?section=${selectedTab.toUpperCase()}&category=${category.toUpperCase()}`);
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     } else {
+  //       const json = await response.json();
+  //       setCardsData(json);
+  //       //console.log(json);
+  //     }
+  //   } catch (error) {
+  //     Alert.alert('Error', `Could not fetch items of this category: ${error.message}`);
+  //     console.error(error);
+  //   }
+  // };
+//******************************************************************************************** //
+
   
-  // @@@@ by me //
-
+// ********************************* For search ***********************************//
 
    // State to hold the search term
    const [searchTerm, setSearchTerm] = useState('');
@@ -78,6 +80,61 @@ const Cards = () => {
       setFilteredData(cardsData);
     }
   }, [searchTerm, cardsData]);
+
+//******************************************************************************************** //
+
+
+
+// *************** For the filtering of category, section, size, price , colour, and type ******************** //
+
+  const [selectedOptions, setSelectedOptions] = useState({
+    size: null,
+    price: null,
+    colour: null,
+    type: null,
+  });
+
+  useEffect(() => {
+    console.log("Updated selectedOptions:", selectedOptions);
+  }, [selectedOptions]);
+
+
+  useEffect(() => {
+    fetchCardsData();
+  }, [selectedTab, category, selectedOptions.size, selectedOptions.price, selectedOptions.colour, selectedOptions.type]);
+
+  const fetchCardsData = async () => {
+    try {
+        // Base URL and initial category/section parameters
+        let url = `${BASE_URL}/items?section=${encodeURIComponent(selectedTab.toUpperCase())}&category=${encodeURIComponent(category.toUpperCase())}`;
+    
+        // Dynamically add other parameters if they are not null
+        if (selectedOptions.size) url += `&size=${encodeURIComponent(selectedOptions.size.toUpperCase())}`;
+        if (selectedOptions.price) url += `&priceRange=${encodeURIComponent(selectedOptions.price)}`;
+        if (selectedOptions.colour) url += `&color=${encodeURIComponent(selectedOptions.colour.toUpperCase())}`;
+        if (selectedOptions.type) url += `&item_type=${encodeURIComponent(selectedOptions.type.toUpperCase())}`;
+    
+        console.log("Fetching data from URL:", url); // For debugging
+        const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else {
+        const json = await response.json();
+        setCardsData(json);
+        //console.log(json);
+      }
+    } catch (error) {
+      Alert.alert('Error', `Could not fetch items of this category: ${error.message}`);
+      console.error(error);
+    }
+  };
+
+// **************************************************************** *********************//
+
+
+
+
 
   const renderItem = ({ item }) => {
     const imageUrl = `${BASE_URL}${item.image1}`;
@@ -99,7 +156,7 @@ const Cards = () => {
     style={{ flex: 1 }}
   >
       <View style= {styles.all}> 
-   <SlideInMenu />
+   <SlideInMenu selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions} />
    <TextInput
           style={styles.searchBar}
           placeholder="Search"

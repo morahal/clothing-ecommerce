@@ -49,16 +49,16 @@ const OptionsModal = ({ visible, onClose, options, selectedOption, onSelect }) =
   );
 };
 
-const SlideInMenu = () => {
+const SlideInMenu = ({selectedOptions, setSelectedOptions}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [options, setOptions] = useState([]);
   const [currentOptionType, setCurrentOptionType] = useState('');
-  const [selectedOptions, setSelectedOptions] = useState({
-    size: null,
-    price: null,
-    colour: null,
-    type: null,
-  });
+  // const [selectedOptions, setSelectedOptions] = useState({
+  //   size: null,
+  //   price: null,
+  //   colour: null,
+  //   type: null,
+  // });
 
   const handleSelect = (option) => {
     setSelectedOptions(prevOptions => {
@@ -77,9 +77,9 @@ const SlideInMenu = () => {
     // Define the options based on the type
     const optionsByType = {
       size: ['S', 'M', 'L', 'XL'],
-      price: ['$10', '$20', '$30', '$40'],
+      price: ['$10 - $20', '$20 - $30', '$30 - $40', '$40 - $50'],
       colour: ['Red', 'Green', 'Blue', 'Yellow'],
-      type: ['Shirt', 'Pants', 'Shoes', 'Hat'],
+      type: ['BASIC', 'STRAIGHT FIT'],
     };
 
     setOptions(optionsByType[optionType]);

@@ -67,25 +67,63 @@ const [modalVisible, setModalVisible] = useState(false);
 const [selectedOptions, setSelectedOptions] = useState({ size: null, colour: null });
 
 
-useEffect(() => {
-  if (selectedOptions.size && selectedOptions.colour) {
+// useEffect(() => {
+//   if (selectedOptions.size && selectedOptions.colour) {
     
-    // Directly dispatch ADD_TO_BAG action. Reducer will handle if it needs to add a new item or increment quantity
-    dispatch({
-      type: 'ADD_TO_BAG',
-      payload: { ...item, s_ize: selectedOptions.size, colour: selectedOptions.colour },
-    });
-    //console.log("hrlloo",bagItems);
-    // Alert.alert("Success", "Item added to bag successfully.");
-    setSelectedOptions({ size: null, colour: null }); // Reset selected options
-    setModalVisible(false); // Close modal
-  }
-}, [selectedOptions.size, selectedOptions.colour,item, dispatch]);
+//     // Directly dispatch ADD_TO_BAG action. Reducer will handle if it needs to add a new item or increment quantity
+//     dispatch({
+//       type: 'ADD_TO_BAG',
+//       payload: { ...item, s_ize: selectedOptions.size, colour: selectedOptions.colour },
+//     });
+//     //console.log("hrlloo",bagItems);
+//     // Alert.alert("Success", "Item added to bag successfully.");
+//     setSelectedOptions({ size: null, colour: null }); // Reset selected options
+//     setModalVisible(false); // Close modal
+//   }
+// }, [selectedOptions.size, selectedOptions.colour,item, dispatch]);
+
+useEffect(() => {
+  const checkItemAndAddToBag = async () => {
+    if (selectedOptions.size && selectedOptions.colour) {
+      try {
+        const url = `${BASE_URL}/specificItem/?section=${encodeURIComponent(item.section)}&category=${encodeURIComponent(item.category)}&name=${encodeURIComponent(item.name)}&size=${encodeURIComponent(selectedOptions.size)}&color=${encodeURIComponent(selectedOptions.colour)}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (response.ok) {
+          // If item is found, dispatch ADD_TO_BAG action
+          dispatch({
+            type: 'ADD_TO_BAG',
+            payload: { ...data, s_ize: selectedOptions.size, colour: selectedOptions.colour },
+          });
+
+          console.log(bagItems);
+
+          // Alert.alert("Success", "Item added to bag successfully.");
+          setSelectedOptions({ size: null, colour: null }); // Reset selected options
+          setModalVisible(false); // Close modal
+        } else {
+          // If item is not found, show alert
+          Alert.alert("The size or color chosen for this item are out of stock.");
+          setSelectedOptions({ size: null, colour: null }); // Reset selected options
+        }
+      } catch (error) {
+        console.error(error);
+        Alert.alert("Error", "Failed to fetch item.");
+      }
+    }
+  };
+
+  checkItemAndAddToBag();
+}, [selectedOptions.size, selectedOptions.colour, item, dispatch]);
 
 
-  useEffect(() => {
-    console.log("Updated selectedOptions:", selectedOptions);
-  }, [selectedOptions]);
+
+
+
+  // useEffect(() => {
+  //   console.log("Updated selectedOptions:", selectedOptions);
+  // }, [selectedOptions]);
 
 
   const [isFavorited, setIsFavorited] = useState(false);
