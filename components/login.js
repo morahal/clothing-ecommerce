@@ -1,39 +1,79 @@
 // LoginPage.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { BASE_URL } from '../constants';
 
 const LoginPage = ({ navigation }) => {
-  const [email, setEmail] = useState('');
+  const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  // const validateUserName = (email) => {
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   return emailRegex.test(email);
+  // };
 
-  const validatePassword = (password) => {
-    // This regex checks for at least one uppercase letter and at least one digit.
-  // It does not restrict lowercase letters and does not allow %, -, or /
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]*[^%\-\/]*$/;
-    return passwordRegex.test(password);
-  };
+  // const validatePassword = (password) => {
+  //   // This regex checks for at least one uppercase letter and at least one digit.
+  // // It does not restrict lowercase letters and does not allow %, -, or /
+  //   const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]*[^%\-\/]*$/;
+  //   return passwordRegex.test(password);
+  // };
 
   const handleLogin = () => {
-    if (!validateEmail(email)) {
-      Alert.alert('Invalid Email', 'Please enter a valid email address.');
-      return;
+    // if (!validateUserName(username)) {
+    //   Alert.alert('Invalid Username', 'Please enter a valid Username address.');
+    //   return;
+    // }
+
+    // if (!validatePassword(password)) {
+    //   Alert.alert(
+    //     'Invalid Password',
+    //     'Password must include numbers and capital letters and should not include %, -, / signs.'
+    //   );
+    //   return;
+    // }
+
+    const userData = {
+      "username": username,
+      "password": password,
     }
 
-    if (!validatePassword(password)) {
-      Alert.alert(
-        'Invalid Password',
-        'Password must include numbers and capital letters and should not include %, -, / signs.'
-      );
-      return;
+    console.log(JSON.stringify(userData));
+
+    const login = async(userData) => {
+      try{
+        const response = await fetch(`${BASE_URL}/login/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userData),
+        });
+
+        if (!response.ok) {
+          throw new Error('HTTP error ' + response.status);
+        }
+    
+        const jsonResponse = await response.json();
+
+        if (jsonResponse.message === "You're logged in.") {
+          navigation.navigate("Home");
+        }
+        else {
+          Alert.alert("Username or password incorrect");
+          console.log(jsonResponse.message);
+        }
+
+      }
+      catch(err){
+        console.error('Failed to login:', err);
+      }
     }
 
-    // If both validations pass, implement login logic here
-    console.log('Login logic goes here');
+    login(userData);
+
+    // navigation.navigate("Home");
+    
   };
 
 
@@ -43,10 +83,9 @@ const LoginPage = ({ navigation }) => {
       <Text style={styles.title}>LOGIN</Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
+        placeholder="Username"
+        value={username}
+        onChangeText={setUserName}
         autoCapitalize="none"
       />
       <TextInput

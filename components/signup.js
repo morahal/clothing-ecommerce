@@ -1,48 +1,16 @@
 // SignUpPage.js
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Alert, Platform } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Alert, Platform} from 'react-native';
 
-const SignUpPage = ({ navigation }) => {
+import { BASE_URL } from '../constants';
+const SignUpPage = ({ }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
   const [address, setAddress] = useState('');
   const [mobilePhone, setMobilePhone] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState(new Date());
-  const [cardHolder, setCardHolder] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [date, setDate] = useState(new Date());
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  
-  // Helper function to handle showing the date picker
-  const showDatePicker = () => {
-    // Android mode is 'date' and display 'spinner' so users can pick month and year
-    // iOS uses 'spinner' which allows picking month and year directly
-    const mode = Platform.OS === 'android' ? 'date' : 'spinner';
-    setDatePickerVisibility(true); // Corrected function call
-  };
-
-  const onDateChange = (event, selectedDate) => {
-    setDatePickerVisibility(Platform.OS === 'ios'); // For iOS, we directly hide the picker
-    if (selectedDate) {
-      setDate(selectedDate); // Update the date state
-      const formattedDate = formatExpiryDate(selectedDate);
-      setExpiryDate(formattedDate);
-    }
-  };
-
-  // Function to format the date to MM/YY
-  const formatExpiryDate = (date) => {
-    let month = '' + (date.getMonth() + 1),
-        year = '' + date.getFullYear().toString().substr(-2);
-
-    if (month.length < 2) month = '0' + month;
-
-    return `${month}/${year}`;
-  };
+  const [firstName, setfirstName] = useState('');
+  const [lastName, setlastName] = useState('');
+  const [UserName, setUserName] = useState('');
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -64,7 +32,9 @@ const SignUpPage = ({ navigation }) => {
 
   const validateAddress = (address) => {
     // Basic check for length, can be improved with more specific checks
-    return address.length > 5;
+    //return address.length > 5;
+    const nameRegex = /^[a-zA-Z\s'-]+$/;
+    return nameRegex.test(address);
   };
 
   const validateMobilePhone = (phone) => {
@@ -73,29 +43,45 @@ const SignUpPage = ({ navigation }) => {
     return phoneRegex.test(phone);
   };
 
-  const validateCardNumber = (number) => {
-    // Basic check for a 16 digit card number
-    const cardNumberRegex = /^\d{16}$/;
-    return cardNumberRegex.test(number.replace(/\s+/g, '')); // Remove spaces before testing
+  // const validateUserName = (username) => {
+  //   // This regex allows letters, spaces, hyphens, and apostrophes only
+  //   const nameRegex = /^[a-zA-Z\s'-]+$/;
+  //   return nameRegex.test(username);
+  // };
+
+
+
+  const checkUsername = async (userName) => {
+    try {
+      const url = `${BASE_URL}/checkUsername/${userName}/`;
+      console.log(url);
+      const response = await fetch(url, {
+        method: 'GET',
+      });
+
+      const data = await response.json();
+      console.log(data.message);
+
+      if(data.message === "Username exists"){
+        Alert.alert('Username already exists');
+        return;
+      }
+      else{
+        handleSignUp();
+        return;
+      }
+    } catch (error) {
+      console.error('Error checking username:', error);
+     // Alert.alert('Error', 'There was an error checking the username.');
+    }
+    return;
   };
 
-  const validateExpiryDate = (date) => {
-    // MM/YY format
-    const expiryDateRegex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
-    return expiryDateRegex.test(date);
-  };
+ 
 
-  const validateCardHolder = (name) => {
-    // Allows letters, spaces, hyphens, and apostrophes
-    const cardHolderRegex = /^[a-zA-Z\s'-]+$/;
-    return cardHolderRegex.test(name);
-  };
 
-  const validateCVV = (cvv) => {
-    // 3 or 4 digits for CVV
-    const cvvRegex = /^\d{3,4}$/;
-    return cvvRegex.test(cvv);
-  };
+
+
 
   // Function to handle the sign-up logic
   const handleSignUp = () => {
@@ -104,21 +90,27 @@ const SignUpPage = ({ navigation }) => {
         return;
       }
   
-      if (!validatePassword(password)) {
+    if (!validatePassword(password)) {
         Alert.alert(
           'Invalid Password',
           'Password must include numbers and capital letters and should not include %, -, / signs.'
         );
         return;
-  }
+      }
 
-  if (!validateFullName(fullName)) {
-    Alert.alert('Invalid Name', 'Please enter a valid full name.');
-    return;
-  }
+     if (!validateFullName(firstName)) {
+         Alert.alert('Invalid firstName', 'Please enter your first name.');
+         return;
+      }
+
+      if (!validateFullName(lastName)) {
+        Alert.alert('Invalid lastName', 'Please enter your last name.');
+        return;
+     }
+
 
   if (!validateAddress(address)) {
-    Alert.alert('Invalid Address', 'Please enter a valid address.');
+    Alert.alert('Invalid Address', 'Please enter your address.');
     return;
   }
 
@@ -127,33 +119,53 @@ const SignUpPage = ({ navigation }) => {
     return;
   }
 
-  if (!validateCardNumber(cardNumber)) {
-    Alert.alert('Invalid Card Number', 'Please enter a valid 16-digit card number.');
-    return;
-  }
 
-  if (!validateExpiryDate(expiryDate)) {
-    Alert.alert('Invalid Expiry Date', 'Please enter a valid expiry date in MM/YY format.');
-    return;
-  }
+  //console.log('All validations passed. Implement sign-up logic.');
+  //console.log(UserName, email, address, mobilePhone, dob, firstName, lastName, address, password);
 
-  if (!validateCardHolder(cardHolder)) {
-    Alert.alert('Invalid Card Holder Name', 'Please enter the card holder name correctly.');
-    return;
-  }
+  const userData = {
+    "username": UserName,
+    "password": password,
+    "email": email,
+    "address": address,
+    "phoneNb": mobilePhone,
+    "firstName": firstName,
+    "lastName": lastName,
+  };
 
-  if (!validateCVV(cvv)) {
-    Alert.alert('Invalid CVV', 'Please enter a valid CVV code.');
-    return;
-  }
+  console.log(JSON.stringify(userData));
 
-  console.log('All validations passed. Implement sign-up logic.');
-
+  const signUpUser = async (userData) => {
+    try {
+      const response = await fetch(`${BASE_URL}/createUser/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('HTTP error ' + response.status);
+      }
+  
+      const jsonResponse = await response.json();
+      console.log('User and profile created:', jsonResponse);
+  
+      // Proceed with any follow-up actions after successful sign-up
+      // For example, navigating to a different screen or showing a success message
+    } catch (error) {
+      console.error('Failed to sign up:', error);
+    }
+  };
+  
+ 
+  signUpUser(userData);
   
 };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.title}>PERSONAL DETAILS</Text>
       <TextInput
         style={styles.input}
@@ -170,12 +182,27 @@ const SignUpPage = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
+      
       <TextInput
         style={styles.input}
-        placeholder="Full Name"
-        value={fullName}
-        onChangeText={setFullName}
+        placeholder="User Name"
+        value={UserName}
+        onChangeText={setUserName}
       />
+
+      <TextInput
+        style={styles.input}
+        placeholder="First Name"
+        value={firstName}
+        onChangeText={setfirstName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Last Name"
+        value={lastName}
+        onChangeText={setlastName}
+      />
+
       <TextInput
         style={styles.input}
         placeholder="Address"
@@ -189,10 +216,10 @@ const SignUpPage = ({ navigation }) => {
         onChangeText={setMobilePhone}
         keyboardType="phone-pad"
       />
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+      <TouchableOpacity style={styles.button} onPress={() => checkUsername(UserName)}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -202,7 +229,8 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingHorizontal: 20,
     backgroundColor: '#fff',
-    justifyContent: 'center',
+    //justifyContent: 'center',
+    marginTop: 50,
   },
   title: {
     fontSize: 22,
