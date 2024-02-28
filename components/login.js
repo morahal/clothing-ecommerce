@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { BASE_URL } from '../constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const LoginPage = ({ navigation }) => {
   const [username, setUserName] = useState('');
@@ -20,18 +22,6 @@ const LoginPage = ({ navigation }) => {
   // };
 
   const handleLogin = () => {
-    // if (!validateUserName(username)) {
-    //   Alert.alert('Invalid Username', 'Please enter a valid Username address.');
-    //   return;
-    // }
-
-    // if (!validatePassword(password)) {
-    //   Alert.alert(
-    //     'Invalid Password',
-    //     'Password must include numbers and capital letters and should not include %, -, / signs.'
-    //   );
-    //   return;
-    // }
 
     const userData = {
       "username": username,
@@ -40,32 +30,35 @@ const LoginPage = ({ navigation }) => {
 
     console.log(JSON.stringify(userData));
 
-    const login = async(userData) => {
-      try{
+    const login = async (userData) => {
+      try {
         const response = await fetch(`${BASE_URL}/login/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(userData),
+          credentials: 'include',
         });
 
         if (!response.ok) {
           throw new Error('HTTP error ' + response.status);
         }
-    
+
         const jsonResponse = await response.json();
 
-        if (jsonResponse.message === "You're logged in.") {
-          navigation.navigate("Home");
-        }
-        else {
-          Alert.alert("Username or password incorrect");
-          console.log(jsonResponse.message);
+        if (jsonResponse.access) {
+          // Store the access token upon successful login
+          await AsyncStorage.setItem('accessToken', jsonResponse.access);
+          // Navigate to the Home screen or handle login success
+          console.log("You're logged in.");
+        } else {
+          console.log("Username or password incorrect");
         }
 
+
       }
-      catch(err){
+      catch (err) {
         console.error('Failed to login:', err);
       }
     }
@@ -73,7 +66,7 @@ const LoginPage = ({ navigation }) => {
     login(userData);
 
     // navigation.navigate("Home");
-    
+
   };
 
 
@@ -98,7 +91,7 @@ const LoginPage = ({ navigation }) => {
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>LOGIN</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity onPress={() => { }}>
         <Text style={styles.forgotPassword}>Have you forgotten your password?</Text>
       </TouchableOpacity>
       <View style={styles.registerContainer}>

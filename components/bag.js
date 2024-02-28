@@ -53,7 +53,18 @@ const BagPage = ({ navigation }) => {
     if (bagItems.length === 0) {
       Alert.alert("Cannot Proceed\n Bag is empty");
     } else {
-      navigation.navigate("Payment");
+
+      const itemsToSend = bagItems.map(item => ({
+        id: item.id,
+        quantity: item.quantity,
+      }));
+
+      const totalPriceToSend = totalPrice.toFixed(2);
+
+      navigation.navigate("Payment", {
+        items: itemsToSend,
+        totalPrice: totalPriceToSend
+      });
     }
   };
 
