@@ -3,14 +3,16 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { BASE_URL } from '../constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useBag } from './bagCntext';
 
 
-const PaymentScreen = ({ route }) => {
+const PaymentScreen = ({ route, navigation }) => {
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cardHolder, setCardHolder] = useState('');
   const [cvv, setCvv] = useState('');
   const { items, totalPrice } = route.params;
+  const { clearBag } = useBag(); // Assuming useBag is your context hook
 
 
   const validateInputs = () => {
@@ -81,6 +83,13 @@ const PaymentScreen = ({ route }) => {
           });
 
           console.log(response.status);
+
+          if (response.status === 200) {
+            clearBag();
+            navigation.navigate("Menu");
+          }
+
+
         }
         catch (err) {
           console.error('Failed to purchase', err);

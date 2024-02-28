@@ -63,7 +63,8 @@ const BagPage = ({ navigation }) => {
 
       navigation.navigate("Payment", {
         items: itemsToSend,
-        totalPrice: totalPriceToSend
+        totalPrice: totalPriceToSend,
+        // onPaymentSuccess: () => dispatch({ type: "CLEAR_BAG" }),      
       });
     }
   };

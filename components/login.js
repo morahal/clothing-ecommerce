@@ -51,7 +51,9 @@ const LoginPage = ({ navigation }) => {
           // Store the access token upon successful login
           await AsyncStorage.setItem('accessToken', jsonResponse.access);
           // Navigate to the Home screen or handle login success
+          navigation.navigate("Home");
           console.log("You're logged in.");
+          
         } else {
           console.log("Username or password incorrect");
         }

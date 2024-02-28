@@ -34,20 +34,21 @@ function bagReducer(state, action) {
     case 'CLEAR_BAG':
       return { ...state, bagItems: [] };
     case 'REMOVE_ITEM':
-        const { id, size, colour } = action.payload;
-        return {
-          ...state,
-          bagItems: state.bagItems.filter(bagItem =>
-            !(bagItem.id === id && bagItem.s_ize === size && bagItem.colour === colour)
-          ),
-        };
+      const { id, size, colour } = action.payload;
+      return {
+        ...state,
+        bagItems: state.bagItems.filter(bagItem =>
+          !(bagItem.id === id && bagItem.s_ize === size && bagItem.colour === colour)
+        ),
+      };
     case 'INCREMENT_QUANTITY':
 
       return {
         ...state,
         bagItems: state.bagItems.map(item =>
           item.id === action.payload.id && item.s_ize === action.payload.size && item.colour === action.payload.colour ?
-            { ...item, 
+            {
+              ...item,
               //quantity: item.quantity + 1
               quantity: item.quantity < item.remaining_quantity ? item.quantity + 1 : item.quantity // Only increment if below max
             } : item
@@ -62,6 +63,12 @@ function bagReducer(state, action) {
             { ...item, quantity: Math.max(item.quantity - 1, 1) } : item // Ensures quantity does not go below 1
         ),
       };
+
+    case "CLEAR_BAG":
+      return {
+        ...state,
+        bagItems: [], // Set bagItems to an empty array
+      };
     default:
       return state;
   }
@@ -71,8 +78,12 @@ function bagReducer(state, action) {
 export const BagProvider = ({ children }) => {
   const [state, dispatch] = useReducer(bagReducer, initialState);
 
+  const clearBag = () => {
+    dispatch({ type: "CLEAR_BAG" });
+  };
+  
   return (
-    <BagContext.Provider value={{ state, dispatch }}>
+    <BagContext.Provider value={{ state, dispatch, clearBag }}>
       {children}
     </BagContext.Provider>
   );
