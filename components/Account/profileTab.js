@@ -1,37 +1,141 @@
-
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image, FlatList, ScrollSafeView } from 'react-native';
+import { BASE_URL } from '../../constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
-const InformationTab = () => {
-  // Define the list of information items
-  const infoItems = [
-    { title: 'ADDRESSES', value: '', action: () => {} }, // Add the action to navigate to the Addresses page
-    { title: 'WALLET', value: '', action: () => {} },    // Add the action to navigate to the Wallet page
-    { title: 'EMAIL', value: 'moodyrah@gmail.com', action: () => {} },
-    { title: 'PHONE NUMBER', value: '+961 78934556', action: () => {} },
-    { title: 'PASSWORD', value: '****', action: () => {} },
-  ];
+
+const InformationTab = ({ navigation }) => {
+
+  const [userInfo, setUserInfo] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
+  const fetchUserInfo = async () => {
+    try {
+      const accessToken = await AsyncStorage.getItem('accessToken');
+
+      if (!accessToken) {
+        setIsLoggedIn(false);
+        return;
+      }
+
+      const response = await fetch(`${BASE_URL}/user/info/`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        setIsLoggedIn(false);
+        throw new Error('HTTP error ' + response.status);
+      }
+
+
+      const userProfile = await response.json();
+
+      setUserInfo({
+        email: userProfile.user?.email ?? '', // Using optional chaining and nullish coalescing
+        phoneNb: userProfile.phoneNb ?? '',
+        first_name: userProfile.user?.first_name ?? '',
+        last_name: userProfile.user?.last_name ?? '',
+        address: userProfile.address ?? '',
+        // Set other fields as per your user model
+      });
+
+      setIsLoggedIn(true);
+
+    } catch (error) {
+      console.log('Failed to fetch user info:', error);
+      setIsLoggedIn(false);
+    }
+  };
+
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUserInfo();
+    },)
+  );
+
+
+  const handleLogout = () => {
+    const logout = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/logout/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', // Include credentials for cookie-based authentication
+        });
+
+        if (!response.ok) {
+          throw new Error('HTTP error ' + response.status);
+        }
+
+        await AsyncStorage.removeItem('accessToken');
+        setIsLoggedIn(false);
+        console.log("You're logged out.");
+
+        // Reset userInfo state after logout
+        setUserInfo({
+          email: '',
+          phoneNb: '',
+          first_name: '',
+          last_name: '',
+          address: '',
+        });
+
+        navigation.navigate("Home");
+
+      } catch (err) {
+        console.error('Failed to logout:', err);
+      }
+    };
+
+    logout();
+  }
+
+  if (!isLoggedIn) {
+    return (
+      <View style={styles.centerContent}>
+        <Text>Please Login or Register</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.infoContainer}>
       <View style={styles.profileSection}>
-        <Text style={styles.profileName}>MOHAMMAD RAHAL</Text>
+        <Text style={styles.profileName}>{userInfo.first_name} {userInfo.last_name}</Text>
       </View>
-      {infoItems.map((item, index) => (
-        <TouchableOpacity key={index} style={styles.infoItem} onPress={item.action}>
-          <Text style={styles.infoTitle}>{item.title}</Text>
-          <Text style={styles.infoValue}>{item.value}</Text>
-        </TouchableOpacity>
-      ))}
-      <TouchableOpacity style={styles.actionButton}>
+
+      <View style={styles.infoItem}>
+        <Text style={styles.infoTitle}>EMAIL</Text>
+        <Text style={styles.infoValue}>{userInfo.email}</Text>
+      </View>
+      <View style={styles.infoItem}>
+        <Text style={styles.infoTitle}>PHONE NUMBER</Text>
+        <Text style={styles.infoValue}>{userInfo.phoneNb}</Text>
+      </View>
+      <View style={styles.infoItem}>
+        <Text style={styles.infoTitle}>ADDRESS</Text>
+        <Text style={styles.infoValue}>{userInfo.address}</Text>
+      </View>
+
+      <TouchableOpacity style={styles.actionButton} onPress={handleLogout}>
         <Text style={styles.actionText}>LOGOUT</Text>
       </TouchableOpacity>
-      
+
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-infoContainer: {
+  infoContainer: {
     flex: 1,
   },
   profileSection: {
@@ -44,7 +148,7 @@ infoContainer: {
     fontSize: 16,
     fontWeight: 'bold',
     paddingLeft: 15,
-},
+  },
   infoItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -71,6 +175,12 @@ infoContainer: {
   },
   actionText: {
     fontSize: 13,
+  },
+
+  centerContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

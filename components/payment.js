@@ -68,6 +68,8 @@ const PaymentScreen = ({ route, navigation }) => {
 
           const accessToken = await AsyncStorage.getItem('accessToken');
 
+          console.log(accessToken);
+          
           if (!accessToken) {
             console.error('Access token not found');
             return;
