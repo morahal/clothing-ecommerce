@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Alert,ActivityIndicator } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
+import { BASE_URL } from '../constants';
 
 const SuggestionsPage = () => {
     const [age, setAge] = useState('');
@@ -11,26 +11,74 @@ const SuggestionsPage = () => {
     const [loading, setLoading] = useState(false); // State for loading indicator
     const navigation = useNavigation();
 
+    const [predictedSize, setPredictedSize] = useState('');
+
+
     const validateInputs = () => {
         // Check if any of the fields is empty
         return age.trim() && height.trim() && weight.trim();
     };
 
-    const handleSeeResult = () => {
+    // const handleSeeResult = () => {
+    //     if (!validateInputs()) {
+    //         // If validation fails, show an alert and do not proceed
+    //         Alert.alert("Invalid Input", "Please fill in all fields.");
+    //         return;
+    //     }
+
+    //     setLoading(true); // Show the loading indicator
+
+    //     // Use a timeout to simulate a loading period
+    //     setTimeout(() => {
+    //       setLoading(false); // Hide the loading indicator
+    //       setShowResults(true); // Show the results
+    //     }, 2000); // 300
+    // };
+
+
+    const handleSeeResult = async () => {
         if (!validateInputs()) {
-            // If validation fails, show an alert and do not proceed
             Alert.alert("Invalid Input", "Please fill in all fields.");
             return;
         }
-
+    
         setLoading(true); // Show the loading indicator
-
-        // Use a timeout to simulate a loading period
-        setTimeout(() => {
-          setLoading(false); // Hide the loading indicator
-          setShowResults(true); // Show the results
-        }, 2000); // 300
+    
+        const requestBody = {
+            weight: weight,
+            age: age,
+            height: height
+        };
+    
+        try {
+            // Replace 'your-api-endpoint-url' with your actual API endpoint URL
+            const response = await fetch(`${BASE_URL}/predict-size/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody)
+            });
+    
+            const data = await response.json();
+    
+            if (!response.ok) {
+                throw new Error(data.detail || 'An error occurred while fetching data.');
+            }
+    
+            const predictedSize = data['Random Forest Tuned Size'];
+            setShowResults(true);
+            setPredictedSize(predictedSize); // You will need to define this state variable
+    
+        } catch (error) {
+            console.error("There was an error fetching the predicted size", error);
+            Alert.alert("Error", "Could not retrieve the predicted size.");
+            setShowResults(false);
+        } finally {
+            setLoading(false); // Hide the loading indicator
+        }
     };
+    
 
     return (
         <SafeAreaView style={styles.container}>
@@ -85,7 +133,9 @@ const SuggestionsPage = () => {
                 <View style={styles.resultContainer}>
                     <Text style={styles.resultTitle}>YOUR SUGGESTED SIZE IS</Text>
 
-                    <Text style={styles.size}>M</Text>
+                    {/* <Text style={styles.size}>-</Text> */}
+                    <Text style={styles.size}>{predictedSize || '-'}</Text>
+
 
                     <TouchableOpacity style={styles.resultButton} onPress={() => navigation.goBack()}>
                         <Text style={styles.buttonText}>OK</Text>

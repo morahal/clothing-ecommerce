@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react';
 import { Dimensions, FlatList, StyleSheet, View, TextInput, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import Card from './card'; // Assuming Card is in the same directory
 import SlideInMenu from './slide-in-menu';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect} from '@react-navigation/native';
 import { BASE_URL } from '../constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+  
 
 const navbarHeight = 80;
 const {width: viewPortWidth, height: viewPortHeight} = Dimensions.get('screen');
@@ -99,9 +101,9 @@ const [cardsData, setCardsData] = useState([]);
   }, [selectedOptions]);
 
 
-  useEffect(() => {
-    fetchCardsData();
-  }, [selectedTab, category, selectedOptions.size, selectedOptions.price, selectedOptions.colour, selectedOptions.type]);
+  // useEffect(() => {
+  //   fetchCardsData();
+  // }, [selectedTab, category, selectedOptions.size, selectedOptions.price, selectedOptions.colour, selectedOptions.type]);
 
   const fetchCardsData = async () => {
     try {
@@ -132,22 +134,78 @@ const [cardsData, setCardsData] = useState([]);
 
 // **************************************************************** *********************//
 
+// ******************************** GET FAVORITED ITEMS *********************//
+// const [favorites, setFavorites] = useState([]);
+
+//   const fetchFavorites = async () => {
+//     try {
+//       const accessToken = await AsyncStorage.getItem('accessToken'); // Retrieve the access token
+//       if (!accessToken) {
+//         console.error('Access token not found');
+//         return;
+//       }
+
+//       const response = await fetch(`${BASE_URL}/favorites/`, { // Replace 'http://your-api-url/favorites/' with your actual API URL
+//         method: 'GET',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': `Bearer ${accessToken}`,
+//         },
+//       });
+
+//       console.log(response);
+
+//       if (!response.ok) {
+//         throw new Error('Failed to fetch favorites');
+//       }
+
+//       const data = await response.json();
+
+//       console.log("from cards get favorites: ",data);
 
 
+//       setFavorites(data); // Update state with the fetched favorites
+//     } catch (error) {
+//       console.error('Error fetching favorites:', error);
+//     }
+//   };
 
+ // Empty dependency array means this effect runs once on mount
+
+
+useFocusEffect(
+  React.useCallback(() => {
+    fetchCardsData(); // Refresh
+    //fetchFavorites();
+  }, [selectedTab, category, selectedOptions.size, selectedOptions.price, selectedOptions.colour, selectedOptions.type])
+);
+
+// **************************************************************** *********************//
 
   const renderItem = ({ item }) => {
     const imageUrl = `${BASE_URL}${item.image1}`;
+    //const isFavorited = favorites.some(favoritedItem => favoritedItem.id === item.id);
+
+    // console.log("isFavorited in cards: ",isFavorited);
+
+    // console.log("favorites in cards: ", favorites);
+
     return (
     <Card
       title={item.name}
       imageUrl={{ uri: imageUrl }}
       price = {item.price}
+      id = {item.id}
+      //isLoved = {isFavorited}
       //onPress={() => navigation.navigate('DetailsPage', { item })}
       onPress={() => navigation.navigate('DetailsPage', { item, origin: 'CardsPage', category, selectedTab})}
     />
   )
   };
+
+
+
+  // console.log(isLoved);
 
   return (
   <>
@@ -169,7 +227,9 @@ const [cardsData, setCardsData] = useState([]);
       keyExtractor={(item) => item.id}
       numColumns={2}
       style={styles.container}
+      //extraData={favorites}
     />
+
     </View>
 
   </KeyboardAvoidingView>

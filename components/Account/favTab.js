@@ -1,89 +1,40 @@
 /********************************* The Favorites Tab  ***********************************/
 import Card from '../card';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image, FlatList, ScrollSafeView } from 'react-native';
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, Dimensions, FlatList} from 'react-native';
+import { BASE_URL } from '../../constants';
+import { useFavorites } from '../favContext';
 
 const { width: viewportWidth } = Dimensions.get('screen');
 const navbarHeight = 80; // Height of the navbar
 
 const FavoritesTab = () => {
   const navigation = useNavigation(); // Hook to get access to navigation object
-  const route = useRoute(); // Hook to get access to route object
-  // Render the favorite items here
-  const cardsData = [
-    {
-      id: '1',
-      title: 'PUFFER JACKET',
-      imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
-      price: 290,
-      description: 'A jacket typically has sleeves and fastens in the front or slightly on the side. A jacket is generally lighter, tighter-fitting, and less insulating than a coat, which is outerwear. Some jackets are fashionable, while others serve as protective clothing. ',
-    },
-  
-    {
-      id: '2',
-      title: 'Blazer Lightning',
-      imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
-      price: 100,
-    },
-  
-    {
-      id: '3',
-      title: 'Boneless Jacket',
-      imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
-      price: 100,
-    },
-  
-    // {
-    //   id: '4',
-    //   title: 'BLACK COAT',
-    //   imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
-    //   price: 100,
-    // },
-  
-    // {
-    //   id: '5',
-    //   title: 'BLACK COAT',
-    //   imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
-    //   price: 100,
-    // },
-  
-    // {
-    //   id: '6',
-    //   title: 'BLACK COAT',
-    //   imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
-    //   price: 100,
-    // },
-  
-    // {
-    //   id: '7',
-    //   title: 'BASIC PUFFER JACKET',
-    //   imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
-    //   price: 100,
-    // },
-    // {
-    //   id: '8',
-    //   title: 'BASIC PUFFER JACKET',
-    //   imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
-    //   price: 100,
-    // },
-  ];
+  const { state } = useFavorites(); // Using favorites directly from the context
 
-  const renderItem = ({ item }) => (
+//console.log("favorites context:", state.favorites);
+
+  
+
+  const renderItem = ({ item }) => {
+    const imageUrl = `${BASE_URL}${item.image1}`;
+    return (
     <Card
-      title={item.title}
-      imageUrl={item.imageUrl[0].source}
+      title={item.name}
+      imageUrl={{ uri: imageUrl }}
       price = {item.price}
+      id = {item.id}
       onPress={() => navigation.navigate('DetailsPage', { item, origin: 'FavoritesTab' })}
-      //onPress={() => navigation.navigate('DetailsPage', { item, origin: 'FavoritesTab' })}
-
     />
-  );
+  )
+  };
   
   return (
     
     <>
        <FlatList
-         data={cardsData}
+         data={state.favorites}
          renderItem={renderItem}
          keyExtractor={(item) => item.id}
          numColumns={2}

@@ -8,6 +8,8 @@ import SlideInDetail from './slide-in-detail';
 import { useBag } from './bagCntext';
 import { AntDesign } from '@expo/vector-icons';
 import { BASE_URL } from '../constants';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFavorites } from './favContext';
 
 //added
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
@@ -17,8 +19,13 @@ const DetailsPage = ({ route }) => {
   //const { item } = route.params;
   const { item, origin, category, selectedTab } = route.params;
   const navigation = useNavigation(); 
-  const { dispatch, state } = useBag();
-  const bagItems = state.bagItems; // Assuming your bagItems are stored in the state object of your context
+  //const { dispatch, state } = useBag();
+  const { state: bagState, dispatch: bagDispatch } = useBag();
+
+
+  //const { state, dispatch } = useFavorites();
+  //const { state: bagState, dispatch: bagDispatch } = useBag();
+  const bagItems = bagState.bagItems; // Assuming your bagItems are stored in the state object of your context
 
   const handleBackPress = () => {
     // Navigate back based on the origin
@@ -92,7 +99,7 @@ useEffect(() => {
         
         if (response.ok) {
           // If item is found, dispatch ADD_TO_BAG action
-          dispatch({
+          bagDispatch({
             type: 'ADD_TO_BAG',
             payload: { ...data, s_ize: selectedOptions.size, colour: selectedOptions.colour },
           });
@@ -115,7 +122,7 @@ useEffect(() => {
   };
 
   checkItemAndAddToBag();
-}, [selectedOptions.size, selectedOptions.colour, item, dispatch]);
+}, [selectedOptions.size, selectedOptions.colour, item, bagDispatch]);
 
 
 
@@ -126,12 +133,92 @@ useEffect(() => {
   // }, [selectedOptions]);
 
 
-  const [isFavorited, setIsFavorited] = useState(false);
 
-  const toggleFavorite = () => {
-    setIsFavorited(!isFavorited);
-    // Add additional logic if needed to handle adding/removing from a global favorites list
+
+  //********************** Added for favorites  *************************/
+
+  //console.log("THE ITEM IN DETAILS:",item.id);
+
+  const { state: favoritesState, dispatch: favoritesDispatch } = useFavorites();
+
+  //const favoritesIds = favoritesState.favorites.map(item => item.id);
+  const favoritesIds = favoritesState.favorites?.map(item => item.id) ?? [];
+
+
+  const [isFavorited, setIsFavorited] = useState(favoritesIds.includes(item.id));
+
+  //console.log("THE isFavorited:",isFavorited);
+
+  useEffect(() => {
+    setIsFavorited(favoritesIds.includes(item.id));
+  }, [favoritesIds, item.id]);
+
+
+  const toggleFavorite = async () => {
+    const isFav = !isFavorited;
+    setIsFavorited(isFav); // Update state first to reflect the UI change
+
+    try {
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      if (!accessToken) {
+        console.log("No access token found");
+        return;
+      }
+
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json");
+      headers.append("Authorization", `Bearer ${accessToken}`);
+
+      let url;
+      let method;
+
+      if (isFav) {
+        // Add to favorites
+        url = `${BASE_URL}/favorites/add/`;
+        method = "POST";
+        //setIsFavorited(true); 
+      } else {
+        // Remove from favorites
+        url = `${BASE_URL}/favorites/remove/`; // Adjust this URL as needed
+        method = "POST";
+        //setIsFavorited(false); 
+      }
+
+      const response = await fetch(url, {
+        method: method,
+        headers: headers,
+        body: JSON.stringify({ item: item.id }), // Use `id` directly as it's passed to the component
+      });
+
+      if (response.ok) {
+
+        favoritesDispatch({
+          type: isFav ? 'ADD_FAVORITE' : 'REMOVE_FAVORITE',
+          payload: item.id,
+        });
+
+        console.log(
+          isFav
+            ? "Item added to favorites successfully"
+            : "Item removed from favorites successfully"
+        );
+
+      } 
+      else if (response.status === 400) {
+        console.log(
+          isFav ? "Item already in favorites" : "Item not found in favorites"
+        );
+      } else {
+        //console.log("Failed to update favorites:", response.status);
+        alert("You need to login to add new favorites.");
+      }
+    } catch (error) {
+      console.error("Error updating favorites:", error);
+    }
+
   };
+
+  //********************** Completed Added for favorites  *************************/
 
   return (
     <SafeAreaView>
