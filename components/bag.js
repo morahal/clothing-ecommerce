@@ -13,6 +13,9 @@ import {
 import { useBag } from "./bagCntext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BASE_URL } from "../constants";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 const { width: viewportWidth, height: viewportHeight } =
   Dimensions.get("screen");
 const navbarHeight = 80;
@@ -54,18 +57,32 @@ const BagPage = ({ navigation }) => {
       Alert.alert("Cannot Proceed\n Bag is empty");
     } else {
 
-      const itemsToSend = bagItems.map(item => ({
-        id: item.id,
-        quantity: item.quantity,
-      }));
+      const checkLogin = async() => {
+        
+        const accessToken = await AsyncStorage.getItem('accessToken');
 
-      const totalPriceToSend = totalPrice.toFixed(2);
+        if(!accessToken){
+          Alert.alert("Please Login to Purchase your Items");
+          return;
+        }
+        else{
+          const itemsToSend = bagItems.map(item => ({
+            id: item.id,
+            quantity: item.quantity,
+          }));
+    
+          const totalPriceToSend = totalPrice.toFixed(2);
+    
+          navigation.navigate("Payment", {
+            items: itemsToSend,
+            totalPrice: totalPriceToSend,
+            // onPaymentSuccess: () => dispatch({ type: "CLEAR_BAG" }),      
+          });
+        }
+      }
 
-      navigation.navigate("Payment", {
-        items: itemsToSend,
-        totalPrice: totalPriceToSend,
-        // onPaymentSuccess: () => dispatch({ type: "CLEAR_BAG" }),      
-      });
+      checkLogin();
+
     }
   };
 

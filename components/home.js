@@ -1,6 +1,9 @@
-import React, { useState, useEffect, useRef }  from 'react';
+import React, { useState, useEffect, useRef, useCallback }  from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { BASE_URL } from '../constants';
  // Correct the import path as necessary
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('screen');
@@ -16,6 +19,7 @@ const HomePage = ({ navigation }) => {
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
   const carouselRef = useRef(null);
 
   useEffect(() => {
@@ -28,6 +32,53 @@ const HomePage = ({ navigation }) => {
     return () => clearInterval(interval);
   }, [activeIndex]);
 
+  const checkLoginStatus = async () => {
+    const accessToken = await AsyncStorage.getItem('accessToken');
+    setIsLoggedIn(!!accessToken); // Set to true if accessToken exists, false otherwise
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      checkLoginStatus();
+    }, [])
+  );
+
+  const logout = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/logout/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Include credentials for cookie-based authentication
+      });
+
+      if (!response.ok) {
+        throw new Error('HTTP error ' + response.status);
+      }
+
+      await AsyncStorage.removeItem('accessToken');
+      setIsLoggedIn(false);
+      console.log("You're logged out.");
+
+      // navigation.navigate("Home");
+
+    } catch (err) {
+      console.error('Failed to logout:', err);
+    }
+  };
+
+
+  const handleAuthButtonPress = async () => {
+    if (isLoggedIn) {
+      // If the user is logged in, call the logout function
+      await logout();
+    } else {
+      // If the user is not logged in, navigate to the Login screen
+      navigation.navigate('Login');
+    }
+  };
+
   const renderItem = ({ item, index }) => {
     return (
       <View style={styles.slide}>
@@ -39,7 +90,7 @@ const HomePage = ({ navigation }) => {
   return (
     <View>
         <View style={styles.header}>
-            <Text style={styles.headerText}>ROSSO</Text>
+            <Text style={styles.headerText}>HDIBZI</Text>
         </View>
       <Carousel
         ref={carouselRef}
@@ -54,9 +105,9 @@ const HomePage = ({ navigation }) => {
       />
       <TouchableOpacity
           style={styles.signinButton}
-          onPress={() => navigation.navigate('Login')}
+          onPress={handleAuthButtonPress}
         >
-          <Text style={styles.signinButtonText}>LOGIN</Text>
+          <Text style={styles.signinButtonText}>{isLoggedIn ? 'LOGOUT' : 'LOGIN'}</Text>
       </TouchableOpacity>
     </View>
   );

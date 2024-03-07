@@ -133,11 +133,9 @@ const [cardsData, setCardsData] = useState([]);
 // **************************************************************** *********************//
 
 
-
-
-
   const renderItem = ({ item }) => {
     const imageUrl = `${BASE_URL}${item.image1}`;
+    console.log(imageUrl);
     return (
     <Card
       title={item.name}

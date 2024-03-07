@@ -9,7 +9,7 @@ const SlideInDetail = ({ selectedOptions, setSelectedOptions, modalVisible, setM
   const navigation = useNavigation();
   // Define options
   const sizeOptions = ['S', 'M', 'L', 'XL'];
-  const colorOptions = ['RED', 'GREEN', 'BLUE', 'YELLOW'];
+  const colorOptions = ['RED', 'GREEN', 'BLUE', 'YELLOW', 'BLACK'];
 
   // Handlers for selecting options
   const handleSelectOption = (type, option) => {

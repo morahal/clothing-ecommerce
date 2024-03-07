@@ -32,40 +32,6 @@ const FavoritesTab = () => {
       imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
       price: 100,
     },
-  
-    // {
-    //   id: '4',
-    //   title: 'BLACK COAT',
-    //   imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
-    //   price: 100,
-    // },
-  
-    // {
-    //   id: '5',
-    //   title: 'BLACK COAT',
-    //   imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
-    //   price: 100,
-    // },
-  
-    // {
-    //   id: '6',
-    //   title: 'BLACK COAT',
-    //   imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
-    //   price: 100,
-    // },
-  
-    // {
-    //   id: '7',
-    //   title: 'BASIC PUFFER JACKET',
-    //   imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
-    //   price: 100,
-    // },
-    // {
-    //   id: '8',
-    //   title: 'BASIC PUFFER JACKET',
-    //   imageUrl: [{ source: require('../../assets/b2.jpg') }, { source: require('../../assets/b1.jpg') }, { source: require('../../assets/b2.jpg') }],
-    //   price: 100,
-    // },
   ];
 
   const renderItem = ({ item }) => (
