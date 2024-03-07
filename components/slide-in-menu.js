@@ -76,10 +76,10 @@ const SlideInMenu = ({selectedOptions, setSelectedOptions}) => {
   const handlePress = (optionType) => {
     // Define the options based on the type
     const optionsByType = {
-      size: ['S', 'M', 'L', 'XL'],
-      price: ['$10 - $20', '$20 - $30', '$30 - $40', '$40 - $50'],
-      colour: ['Red', 'Green', 'Blue', 'Yellow'],
-      type: ['BASIC', 'STRAIGHT FIT'],
+      size: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
+      price: ['$10 - $20', '$20 - $30', '$30 - $40', '$40 - $50', '$50 - $60', '$60 - $70', '$70 - $80', '$80 - $90'],
+      colour: ['Red', 'Green', 'Blue', 'Yellow', 'Black'],
+      //type: ['BASIC', 'STRAIGHT FIT'],
     };
 
     setOptions(optionsByType[optionType]);
@@ -94,7 +94,7 @@ const SlideInMenu = ({selectedOptions, setSelectedOptions}) => {
         <ListItem title="SIZE" onPress={() => handlePress('size')} selected={selectedOptions.size !== null}/>
         <ListItem title="PRICE" onPress={() => handlePress('price')} selected={selectedOptions.price !== null}/>
         <ListItem title="COLOUR" onPress={() => handlePress('colour')} selected={selectedOptions.colour !== null}/>
-        <ListItem title="TYPE" onPress={() => handlePress('type')} selected={selectedOptions.type !== null}/>
+        {/* <ListItem title="TYPE" onPress={() => handlePress('type')} selected={selectedOptions.type !== null}/> */}
 
       </View>
 

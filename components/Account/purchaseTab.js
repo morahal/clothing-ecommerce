@@ -12,10 +12,22 @@ const PurchasesTab = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
     const fetchPurchases = async () => {
-      setLoading(true);
+      // setLoading(true);
       try {
         const token = await AsyncStorage.getItem('accessToken');
+        //console.log(token);
+        if (!token) {
+          setIsLoggedIn(false);
+          return;
+        }
+
+        else{
+          setIsLoggedIn(true);
+        }
+
         const response = await fetch(`${BASE_URL}/users/purchases/`, {
           method: 'GET',
           headers: {
@@ -23,17 +35,25 @@ const PurchasesTab = () => {
             'Authorization': `Bearer ${token}`,
           },
         });
+        //console.log(response);
         if (!response.ok) {
-          throw new Error('Failed to fetch purchases');
+          //throw new Error('Failed to fetch purchases');
         }
+
         const result = await response.json();
+
+        console.log("RESULT: ",result);
+        
         setOrders(result);
+
       } catch (error) {
-        console.error('Error fetching purchases:', error);
-        setError('Failed to load purchases. Please try again later.');
-      } finally {
-        setLoading(false);
+        console.log('Error fetching purchases:', error);
+        //setError('Please login to view your purchases.');
+        // setError('Please login to view your purchases.\n {Failed to load purchases.}');
       }
+      //  finally {
+      //   // setLoading(false);
+      // }
     };
 
     useFocusEffect(
@@ -42,15 +62,21 @@ const PurchasesTab = () => {
       }, [])
     );
 
-  if (loading) {
-    return <Text>Loading...</Text>;
-  }
+  // if (loading) {
+  //   return <Text>Loading...</Text>;
+  // }
 
-  if (error) {
-    return <Text>{error}</Text>;
-  }
+  // if (error) {
+  //   return <Text>{error}</Text>;
+  // }
 
-  
+  if (!isLoggedIn) {
+    return (
+      <View style={styles.centerContent}>
+        <Text>Please Login or Register to View Your Purchases.</Text>
+      </View>
+    );
+  }
 
   const renderOrderItem = ({ item }) => <PurchaseItem order={item} />;
 
@@ -149,8 +175,10 @@ const styles = StyleSheet.create({
   itemImage: {
     width: viewportWidth * 0.4, // Adjust the width as needed
     height: 200,
-    // marginLeft: 1,
+    marginLeft: 5,
     borderWidth: 0.5,
+    // borderColor: 'red',
+    // borderWidth: 1,
   },
   itemDetails: {
     padding: 10,
@@ -164,6 +192,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     paddingTop: 5,
+  },
+
+  centerContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

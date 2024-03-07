@@ -90,7 +90,7 @@ const HomePage = ({ navigation }) => {
   return (
     <View>
         <View style={styles.header}>
-            <Text style={styles.headerText}>HDIBZI</Text>
+            <Text style={styles.headerText}>ROSSO</Text>
         </View>
       <Carousel
         ref={carouselRef}

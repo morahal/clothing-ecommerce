@@ -71,7 +71,7 @@ const PaymentScreen = ({ route, navigation }) => {
           console.log(accessToken);
           
           if (!accessToken) {
-            console.error('Access token not found');
+            console.log('Access token not found');
             return;
           }
 

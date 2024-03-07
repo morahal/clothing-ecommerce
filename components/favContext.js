@@ -42,7 +42,7 @@ export const FavoritesProvider = ({ children }) => {
     //   try {
         const accessToken = await AsyncStorage.getItem('accessToken');
         if (!accessToken) {
-          console.error('Access token not found');
+          console.log('Access token not found');
           return;
         }
   

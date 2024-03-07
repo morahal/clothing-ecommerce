@@ -37,6 +37,7 @@ const Card = ({ id, title, imageUrl, price, onPress}) => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
       if (!accessToken) {
+        alert("You need to login to add new favorites.");
         console.log("No access token found");
         return;
       }

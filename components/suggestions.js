@@ -93,7 +93,7 @@ const SuggestionsPage = () => {
                             keyboardType="numeric"
                             value={age}
                             onChangeText={setAge}
-                            placeholder="Enter your age"
+                            placeholder="Enter your age in years..."
                         />
 
                         {/* <Text style={styles.label}>Height (cm)</Text> */}
@@ -102,7 +102,7 @@ const SuggestionsPage = () => {
                             keyboardType="numeric"
                             value={height}
                             onChangeText={setHeight}
-                            placeholder="Enter your height"
+                            placeholder="Enter your height in centimeters (cm)..."
                         />
 
                         {/* <Text style={styles.label}>Weight (kg)</Text> */}
@@ -111,7 +111,7 @@ const SuggestionsPage = () => {
                             keyboardType="numeric"
                             value={weight}
                             onChangeText={setWeight}
-                            placeholder="Enter your weight"
+                            placeholder="Enter your weight in kilograms (kg)..."
                         />
 
 
