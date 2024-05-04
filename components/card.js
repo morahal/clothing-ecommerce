@@ -1,34 +1,26 @@
-import React, { useState , useEffect} from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "../constants";
-import { useFavorites } from './favContext';
+import { useFavorites } from "./favContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const Card = ({ id, title, imageUrl, price, onPress}) => {
+const Card = ({ id, title, imageUrl, price, onPress }) => {
   //const [isFavorited, setIsFavorited] = useState(false);
 
   const { state, dispatch } = useFavorites();
 
-  console.log("THE STATE: ",state.favorites);
+  console.log("THE STATE: ", state.favorites);
 
   //const favoritesIds = state.favorites.map(item => item.id);
-  const favoritesIds = state.favorites?.map(item => item.id) ?? [];
-
+  const favoritesIds = state.favorites?.map((item) => item.id) ?? [];
 
   const [isFavorited, setIsFavorited] = useState(favoritesIds.includes(id));
 
   useEffect(() => {
     setIsFavorited(favoritesIds.includes(id));
   }, [favoritesIds, id]);
-
 
   const toggleFavorite = async () => {
     const isFav = !isFavorited;
@@ -53,12 +45,12 @@ const Card = ({ id, title, imageUrl, price, onPress}) => {
         // Add to favorites
         url = `${BASE_URL}/favorites/add/`;
         method = "POST";
-        //setIsFavorited(true); 
+        //setIsFavorited(true);
       } else {
         // Remove from favorites
         url = `${BASE_URL}/favorites/remove/`; // Adjust this URL as needed
         method = "POST";
-        //setIsFavorited(false); 
+        //setIsFavorited(false);
       }
 
       const response = await fetch(url, {
@@ -68,9 +60,8 @@ const Card = ({ id, title, imageUrl, price, onPress}) => {
       });
 
       if (response.ok) {
-
         dispatch({
-          type: isFav ? 'ADD_FAVORITE' : 'REMOVE_FAVORITE',
+          type: isFav ? "ADD_FAVORITE" : "REMOVE_FAVORITE",
           payload: id,
         });
 
@@ -79,9 +70,7 @@ const Card = ({ id, title, imageUrl, price, onPress}) => {
             ? "Item added to favorites successfully"
             : "Item removed from favorites successfully"
         );
-
-      } 
-      else if (response.status === 400) {
+      } else if (response.status === 400) {
         console.log(
           isFav ? "Item already in favorites" : "Item not found in favorites"
         );
@@ -92,9 +81,7 @@ const Card = ({ id, title, imageUrl, price, onPress}) => {
     } catch (error) {
       console.error("Error updating favorites:", error);
     }
-
   };
-
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.card}>

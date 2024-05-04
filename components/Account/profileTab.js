@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -58,10 +58,16 @@ const InformationTab = ({ navigation }) => {
     }
   };
 
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     fetchUserInfo();
+  //   })
+  // );
+
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       fetchUserInfo();
-    })
+    }, [])
   );
 
   const handleLogout = () => {
