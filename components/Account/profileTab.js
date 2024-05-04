@@ -1,19 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image, FlatList, ScrollSafeView } from 'react-native';
-import { BASE_URL } from '../../constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  Image,
+  FlatList,
+  ScrollSafeView,
+} from "react-native";
+import { BASE_URL } from "../../constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 const InformationTab = ({ navigation }) => {
-
   const [userInfo, setUserInfo] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-
   const fetchUserInfo = async () => {
     try {
-      const accessToken = await AsyncStorage.getItem('accessToken');
+      const accessToken = await AsyncStorage.getItem("accessToken");
 
       if (!accessToken) {
         setIsLoggedIn(false);
@@ -21,83 +28,78 @@ const InformationTab = ({ navigation }) => {
       }
 
       const response = await fetch(`${BASE_URL}/user/info/`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
         },
       });
 
       if (!response.ok) {
         setIsLoggedIn(false);
-        throw new Error('HTTP error ' + response.status);
+        throw new Error("HTTP error " + response.status);
       }
-
 
       const userProfile = await response.json();
 
       setUserInfo({
-        email: userProfile.user?.email ?? '', // Using optional chaining and nullish coalescing
-        phoneNb: userProfile.phoneNb ?? '',
-        first_name: userProfile.user?.first_name ?? '',
-        last_name: userProfile.user?.last_name ?? '',
-        address: userProfile.address ?? '',
+        email: userProfile.email ?? "", // Using optional chaining and nullish coalescing
+        phoneNb: userProfile.phoneNb ?? "",
+        first_name: userProfile.first_name ?? "",
+        last_name: userProfile.last_name ?? "",
+        address: userProfile.address ?? "",
         // Set other fields as per your user model
       });
 
       setIsLoggedIn(true);
-
     } catch (error) {
-      console.log('Failed to fetch user info:', error);
+      console.log("Failed to fetch user info:", error);
       setIsLoggedIn(false);
     }
   };
 
-
   useFocusEffect(
     React.useCallback(() => {
       fetchUserInfo();
-    },)
+    })
   );
-
 
   const handleLogout = () => {
     const logout = async () => {
       try {
         const response = await fetch(`${BASE_URL}/logout/`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          credentials: 'include', // Include credentials for cookie-based authentication
+          credentials: "include", // Include credentials for cookie-based authentication
         });
 
         if (!response.ok) {
-          throw new Error('HTTP error ' + response.status);
+          throw new Error("HTTP error " + response.status);
         }
 
-        await AsyncStorage.removeItem('accessToken');
+        await AsyncStorage.removeItem("accessToken");
         setIsLoggedIn(false);
         console.log("You're logged out.");
 
         // Reset userInfo state after logout
         setUserInfo({
-          email: '',
-          phoneNb: '',
-          first_name: '',
-          last_name: '',
-          address: '',
+          email: "",
+          phoneNb: "",
+          first_name: "",
+          last_name: "",
+          address: "",
         });
 
         navigation.navigate("Home");
-
       } catch (err) {
-        console.error('Failed to logout:', err);
+        console.error("Failed to logout:", err);
       }
     };
 
     logout();
-  }
+  };
 
   if (!isLoggedIn) {
     return (
@@ -110,7 +112,9 @@ const InformationTab = ({ navigation }) => {
   return (
     <ScrollView style={styles.infoContainer}>
       <View style={styles.profileSection}>
-        <Text style={styles.profileName}>{userInfo.first_name} {userInfo.last_name}</Text>
+        <Text style={styles.profileName}>
+          {userInfo.first_name} {userInfo.last_name}
+        </Text>
       </View>
 
       <View style={styles.infoItem}>
@@ -129,7 +133,6 @@ const InformationTab = ({ navigation }) => {
       <TouchableOpacity style={styles.actionButton} onPress={handleLogout}>
         <Text style={styles.actionText}>LOGOUT</Text>
       </TouchableOpacity>
-
     </ScrollView>
   );
 };
@@ -141,36 +144,36 @@ const styles = StyleSheet.create({
   profileSection: {
     paddingVertical: 20,
     borderBottomWidth: 1,
-    borderBottomColor: 'grey',
-    textAlign: 'left',
+    borderBottomColor: "grey",
+    textAlign: "left",
   },
   profileName: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     paddingLeft: 15,
   },
   infoItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingVertical: 25,
     borderBottomWidth: 0.4,
-    borderBottomColor: 'grey',
+    borderBottomColor: "grey",
   },
   infoTitle: {
     fontSize: 13,
   },
   infoValue: {
     fontSize: 12,
-    color: '#808080',
+    color: "#808080",
   },
   actionButton: {
     paddingVertical: 15,
-    alignItems: 'center',
+    alignItems: "center",
     borderTopWidth: 1,
-    borderTopColor: '#e1e1e1',
+    borderTopColor: "#e1e1e1",
     borderBottomWidth: 1,
-    borderBottomColor: '#e1e1e1',
+    borderBottomColor: "#e1e1e1",
     marginTop: 70,
   },
   actionText: {
@@ -179,8 +182,8 @@ const styles = StyleSheet.create({
 
   centerContent: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
